@@ -4,7 +4,7 @@
 var express = require('express');
  
 // Cargamos el controlador
-var Controller = require('../controllers/Category');
+var Controller = require('../controllers/Movement');
  
 // Llamamos al router
 var api = express.Router();
@@ -15,6 +15,7 @@ api.put('/edit', Controller.edit);
 api.delete('/remove', Controller.remove);
 api.get('/getAll', Controller.getAll);
 api.get('/getById', Controller.getById);
- 
+api.get('/getAll', Controller.getByMonth);
+api.get('/getById', Controller.getByYears);
 // Exportamos la configuración
 module.exports = api;
