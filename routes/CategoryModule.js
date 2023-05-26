@@ -1,20 +1,21 @@
-'use strict'
+
+const express = require('express');
  
 // Cargamos el módulo de express para poder crear rutas
-var express = require('express');
- 
+const app = express();
+const router = express.Router();
 // Cargamos el controlador
 var Controller = require('../controllers/Category');
  
 // Llamamos al router
-var api = express.Router();
+
  
 // Creamos una ruta de tipo GET para el método de pruebas
-api.post('/add', Controller.add);
-api.put('/edit', Controller.edit);
-api.delete('/remove', Controller.remove);
-api.get('/getAll', Controller.getAll);
-api.get('/getById', Controller.getById);
- 
+router.post('/add', Controller.add);
+router.put('/edit', Controller.edit);
+router.delete('/remove', Controller.remove);
+router.get('/getAll', Controller.getAll);
+router.get('/getById', Controller.getById);
+app.use(router);
 // Exportamos la configuración
-module.exports = api;
+module.exports = router;
