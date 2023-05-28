@@ -16,44 +16,34 @@ async function add(req, res,){
         key: '',
         name: req.body.name,
         image: req.body.image,
-        createdDate: date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate(),
+        createdDate: req.body.createdDate,
         modifiedDate: ''
     }
-    /*
-category.key = res;
-    req.body.key = res;
-    db.ref(table).update(category.key, {
-        key: category.key,
-        name: category.name,
-        image: category.image,
-        createdDate: category.createdDate,
-        modifiedDate: date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
-    })
-    */
-   const key = db.ref(table).push(category)
+  
+  return db.ref(table).push(category).then(response => {
+  
+    return response.key;
+   })
   
 
    
   
-// Devolvemos una respuesta en JSON
-    res.status(200). send({
-        menssage: 'Se genero la key ' + key,
-        
-    });
-    
+
+ 
 }  
   
-function edit(req, res){
+async function edit(req, res){
  
-     db.ref(table).update(req.key, {
-                                    key: req.key,
-                                    name: req.name,
-                                    image: req.image
-
+    var ref = db.ref(table);
+    console.log(req.body.key)
+    var upref = ref.child(req.body.key);
+            upref.update( {
+                                    key: req.body.key,
+                                    name: req.body.name,
+                                    image: req.body.image,
+                                    modifiedDate: req.body.modifiedDate
                                      })
-        res.status(200).send({
-            menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
-        });
+     
     }
 function remove(req, res){
 

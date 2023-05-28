@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 // Cargamos el controlador
-var Controller = require('../controllers/Category');
+var Controller = require('../controllers/CategoryController');
  
 // Llamamos al router
 
