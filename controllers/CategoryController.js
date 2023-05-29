@@ -9,27 +9,21 @@ async function add(req, res,){
      
    
     req.body.key = key;
-    req.body.modifiedDate = helper.getNowWithHours();
-// Devolvemos una respuesta en JSON
+   // req.body.modifiedDate = helper.getNowWithHours();
    
-      service.edit(req, res)
+    service.edit(req, res)
       res.status(200). send({
-        menssage: 'Se genero la key ' + key,
+        menssage: 'Se genero la categoria ' + req.body.name
         
         
     });
 }  
   
-function edit(req, res){
- 
-     db.ref(table).update(req.key, {
-                                    key: req.key,
-                                    name: req.name,
-                                    image: req.image
-
-                                     })
+async function edit(req, res){
+    req.body.modifiedDate = helper.getNowWithHours();
+    await service.edit(req, res);
         res.status(200).send({
-            menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
+            menssage: 'Se actualizo la categoria ' + req.body.name
         });
     }
 function remove(req, res){
@@ -39,13 +33,10 @@ function remove(req, res){
             menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
         });
     }
-function getAll(req, res){
-
-    // Devolvemos una respuesta en JSON
-        res.status(200).send({
-            menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
-        });
-    }
+async function getAll(req, res){
+    return await service.getAll();
+    
+ }
 function getById(req, res){
     console.log('paso el get');
     // Devolvemos una respuesta en JSON
