@@ -34,7 +34,9 @@ function remove(req, res){
         });
     }
 async function getAll(req, res){
-    return await service.getAll();
+    const list = await service.getAll();
+    console.log(list);
+    return list;
     
  }
 function getById(req, res){

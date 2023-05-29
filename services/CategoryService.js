@@ -10,8 +10,8 @@ const { getFirestore, Timestamp, FieldValue, collection } = require('firebase-ad
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://gastosdiarios-e2f45-default-rtdb.firebaseio.com"
   });
- //const db = admin.database();
- const db = admin.firestore();
+ const db = admin.database();
+// const db = admin.firestore();
 async function add(req, res,){
   const date = new Date();
   
@@ -57,9 +57,15 @@ function remove(req, res){
         });
     }
 async function getAll(req, res){
-    const snapshot = await db.collection('GastosDiarios').get();
-    console.log(snapshot)
-    snapshot.docs.map(doc => console.log(doc.data()));
+       return await db.ref(table).once('value', (snapshot) => {
+        const data = snapshot.val();
+        //console.log(data)
+        return data;
+       // res.render('index' , {Category: data})
+       
+    });
+   // console.log(snapshot)
+    //snapshot.docs.map(doc => console.log(doc.data()));
     
 }
     
