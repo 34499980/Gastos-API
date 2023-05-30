@@ -1,6 +1,7 @@
 
 var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
+const res = require('express/lib/response');
 
 async function add(req, res,){
     const date = new Date();
@@ -34,9 +35,10 @@ function remove(req, res){
         });
     }
 async function getAll(req, res){
-    const list = await service.getAll();
-    console.log(list);
-    return list;
+    const list = await (await service.getAll()).val();    
+    res.status(200).json(list);
+    
+        
     
  }
 function getById(req, res){

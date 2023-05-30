@@ -57,11 +57,9 @@ function remove(req, res){
         });
     }
 async function getAll(req, res){
-       return await db.ref(table).once('value', (snapshot) => {
+     return   await db.ref(table).once('value', (snapshot) => {
         const data = snapshot.val();
-        //console.log(data)
-        return data;
-       // res.render('index' , {Category: data})
+        
        
     });
    // console.log(snapshot)
