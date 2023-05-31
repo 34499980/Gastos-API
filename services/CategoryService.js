@@ -90,8 +90,15 @@ async function getById(req, res){
   
 async function getByName(req, res){
    // return   await db.ref(table).on('name', req.body.name)
-   
-    return await db.collection(table).where("name", "==", req.body.name).get()
+   let list = [];
+    return await db.collection(table).where("name", "==", req.body.name).get().then(snap => {
+        snap.forEach(doc => {
+            console.log(doc.data());
+           
+            list.push(doc.data())
+        });
+        return list;
+    });     
    // console.log(snapshot)
 }
  

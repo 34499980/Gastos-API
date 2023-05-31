@@ -4,19 +4,30 @@ var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 
 async function add(req, res,){
-    const date = new Date();
-    req.body.createdDate = helper.getNowWithHours();
-       const  key = await service.add(req,res);     
-   
-    req.body.key = key;
-    req.body.modifiedDate = helper.getNowWithHours();
-   
-    service.edit(req, res)
-      res.status(200). send({
-        menssage: 'Se genero la categoria ' + req.body.name
-        
-        
-    });
+    const list = await getByPrivate(req, res)
+    console.log(list.length)
+    
+    if(list.length == 0) {
+        req.body.createdDate = helper.getNowWithHours();
+        const  key = await service.add(req,res);     
+    
+     req.body.key = key;
+     req.body.modifiedDate = helper.getNowWithHours();
+    
+     service.edit(req, res)
+       res.status(200). send({
+         menssage: 'Se genero la categoria ' + req.body.name
+         
+         
+     });
+    } else {
+        res.status(500). send({
+            menssage: 'La categoria ' + req.body.name + ' ya existe'
+            
+            
+        });
+    }
+    
 }  
   
 async function edit(req, res){
@@ -48,15 +59,12 @@ async function getAll(req, res){
         
     
  }
+ async function getByPrivate(req, res){
+    let list =  await service.getByName(req)
+    return list;
+ }
 async function getByName(req, res){
-    let list = [];
-     await service.getByName(req).then(snap => {
-        snap.forEach(doc => {
-            console.log(doc.data());
-           
-            list.push(doc.data())
-        });
-    });     
+    let list =  await service.getByName(req)
     res.status(200).json(list);
  }
  async function getById(req, res){
