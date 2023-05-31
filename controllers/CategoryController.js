@@ -5,7 +5,7 @@ const res = require('express/lib/response');
 
 async function add(req, res,){
     const list = await getByPrivate(req, res)
-    console.log(list.length)
+   
     
     if(list.length == 0) {
         req.body.createdDate = helper.getNowWithHours();
@@ -31,12 +31,24 @@ async function add(req, res,){
 }  
   
 async function edit(req, res){
-    req.body.modifiedDate = helper.getNowWithHours();
-    await service.edit(req, res);
-        res.status(200).send({
-            menssage: 'Se actualizo la categoria ' + req.body.name
+    const list = await getByPrivate(req, res)
+   
+    
+    if(list.length == 0) {
+        req.body.modifiedDate = helper.getNowWithHours();
+        await service.edit(req, res);
+            res.status(200).send({
+                menssage: 'Se actualizo la categoria ' + req.body.name
+         });
+    } else {
+        res.status(500). send({
+            menssage: 'La categoria ' + req.body.name + ' ya existe'
+            
+            
         });
     }
+   
+ }
 function remove(req, res){
 
     // Devolvemos una respuesta en JSON
