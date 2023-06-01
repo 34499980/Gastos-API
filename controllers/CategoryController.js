@@ -32,14 +32,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getById = exports.getByName = exports.getByPrivate = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
+exports.getByIdPrivate = exports.getById = exports.getByName = exports.getByNamePrivate = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
 const service = __importStar(require("../services/CategoryService"));
 //var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const entity = yield getByPrivate(req, res);
+        const entity = yield getByNamePrivate(req, res);
         if (entity == undefined) {
             req.body.createdDate = helper.getNowWithHours();
             const key = yield service.add(req, res);
@@ -60,10 +60,17 @@ function add(req, res) {
 exports.add = add;
 function edit(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const entity = yield getByPrivate(req, res);
-        if (entity == undefined) {
-            req.body.modifiedDate = helper.getNowWithHours();
-            yield service.edit(req, res);
+        const dbEntity = yield getByNamePrivate(req, res);
+        console.log(dbEntity);
+        if (dbEntity == undefined || dbEntity.key == req.body.key) {
+            const entity = {
+                key: req.body.key,
+                createdDate: req.body.createdDate,
+                name: req.body.name,
+                image: req.body.image,
+                modifiedDate: helper.getNowWithHours()
+            };
+            yield service.edit(entity, res);
             res.status(200).send({
                 menssage: 'Se actualizo la categoria ' + req.body.name
             });
@@ -90,13 +97,13 @@ function getAll(req, res) {
     });
 }
 exports.getAll = getAll;
-function getByPrivate(req, res) {
+function getByNamePrivate(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let list = yield service.getByName(req);
         return list;
     });
 }
-exports.getByPrivate = getByPrivate;
+exports.getByNamePrivate = getByNamePrivate;
 function getByName(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let list = yield service.getByName(req);
@@ -111,6 +118,12 @@ function getById(req, res) {
     });
 }
 exports.getById = getById;
+function getByIdPrivate(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield service.getById(req);
+    });
+}
+exports.getByIdPrivate = getByIdPrivate;
 // Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,

@@ -58,13 +58,14 @@ exports.add = add;
 function edit(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var ref = db.collection(table);
-        console.log(req.body.key);
-        var upref = ref.doc(req.body.key);
+        console.log(req.key);
+        var upref = ref.doc(req.key);
         upref.update({
-            key: req.body.key,
-            name: req.body.name,
-            image: req.body.image,
-            modifiedDate: req.body.modifiedDate
+            key: req.key,
+            name: req.name,
+            image: req.image,
+            modifiedDate: req.modifiedDate,
+            createdDate: req.createdDate
         });
     });
 }

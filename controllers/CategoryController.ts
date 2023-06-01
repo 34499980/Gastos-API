@@ -1,10 +1,11 @@
+import { Category } from '../models/CategoryModel';
 import * as service from  '../services/CategoryService'
 //var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 
 export async function add(req, res,){
-    const entity = await getByPrivate(req, res)
+    const entity = await getByNamePrivate(req, res)
     if(entity == undefined) {
         req.body.createdDate = helper.getNowWithHours();
         const  key = await service.add(req,res);  
@@ -24,11 +25,18 @@ export async function add(req, res,){
 }  
   
 export async function edit(req, res){
-    const entity = await getByPrivate(req, res)
-    
-    if(entity == undefined) {
-        req.body.modifiedDate = helper.getNowWithHours();
-        await service.edit(req, res);
+    const dbEntity = await getByNamePrivate(req, res)   
+    console.log(dbEntity)
+    if(dbEntity == undefined || dbEntity.key == req.body.key) { 
+       const entity: Category = {
+        key: req.body.key,
+        createdDate: req.body.createdDate,
+        name: req.body.name,  
+        image: req.body.image,          
+        modifiedDate: helper.getNowWithHours()
+        } 
+      
+        await service.edit(entity, res);
             res.status(200).send({
                 menssage: 'Se actualizo la categoria ' + req.body.name
          });
@@ -50,7 +58,7 @@ export async function getAll(req, res){
     let list = await service.getAll()
     res.status(200).json(list);
  }
- export async function getByPrivate(req, res){
+ export async function getByNamePrivate(req, res){
     let list =  await service.getByName(req)
     return list;
  }
@@ -61,6 +69,10 @@ export async function getAll(req, res){
 export async function getById(req, res){
     let entity = await service.getById(req)
     res.status(200).json(entity);
+ }
+ export async function getByIdPrivate(req, res){
+    return await service.getById(req)
+    
  }
  
 // Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
