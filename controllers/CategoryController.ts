@@ -1,40 +1,32 @@
-
-var service = require('../services/CategoryService');
+import * as service from  '../services/CategoryService'
+//var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 
 export async function add(req, res,){
-    const list = await getByPrivate(req, res)
-   
-    
-    if(list.length == 0) {
+    const entity = await getByPrivate(req, res)
+    if(entity == undefined) {
         req.body.createdDate = helper.getNowWithHours();
-        const  key = await service.add(req,res);     
+        const  key = await service.add(req,res);  
+        req.body.key = key;
+        req.body.modifiedDate = helper.getNowWithHours();
     
-     req.body.key = key;
-     req.body.modifiedDate = helper.getNowWithHours();
-    
-     service.edit(req, res)
-       res.status(200). send({
+        service.edit(req, res)
+        res.status(200). send({
          menssage: 'Se genero la categoria ' + req.body.name
-         
-         
      });
     } else {
         res.status(500). send({
             menssage: 'La categoria ' + req.body.name + ' ya existe'
-            
-            
         });
     }
     
 }  
   
 export async function edit(req, res){
-    const list = await getByPrivate(req, res)
-   
+    const entity = await getByPrivate(req, res)
     
-    if(list.length == 0) {
+    if(entity == undefined) {
         req.body.modifiedDate = helper.getNowWithHours();
         await service.edit(req, res);
             res.status(200).send({
@@ -43,8 +35,6 @@ export async function edit(req, res){
     } else {
         res.status(500). send({
             menssage: 'La categoria ' + req.body.name + ' ya existe'
-            
-            
         });
     }
    
@@ -58,11 +48,7 @@ export async function edit(req, res){
     }
 export async function getAll(req, res){
     let list = await service.getAll()
-   
     res.status(200).json(list);
-    
-        
-    
  }
  export async function getByPrivate(req, res){
     let list =  await service.getByName(req)

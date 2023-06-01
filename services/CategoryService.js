@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getByName = exports.getById = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
 const table = 'Category';
 //const admin = require('firebase-admin')
 const admin = require('firebase-admin');
@@ -51,6 +54,7 @@ function add(req, res) {
         });
     });
 }
+exports.add = add;
 function edit(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var ref = db.collection(table);
@@ -64,13 +68,15 @@ function edit(req, res) {
         });
     });
 }
+exports.edit = edit;
 function remove(req, res) {
     // Devolvemos una respuesta en JSON
     res.status(200).send({
         menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
     });
 }
-function getAll(req, res) {
+exports.remove = remove;
+function getAll() {
     return __awaiter(this, void 0, void 0, function* () {
         let list = [];
         return yield db.collection(table).get().then(snap => {
@@ -84,7 +90,8 @@ function getAll(req, res) {
         //snapshot.docs.map(doc => console.log(doc.data()));
     });
 }
-function getById(req, res) {
+exports.getAll = getAll;
+function getById(req) {
     return __awaiter(this, void 0, void 0, function* () {
         // return   await db.ref(table).on('name', req.body.name)
         return yield db.collection(table).doc(req.body.key).get().then(snap => {
@@ -93,7 +100,8 @@ function getById(req, res) {
         // console.log(snapshot)
     });
 }
-function getByName(req, res) {
+exports.getById = getById;
+function getByName(req) {
     return __awaiter(this, void 0, void 0, function* () {
         // return   await db.ref(table).on('name', req.body.name)
         let entity;
@@ -107,6 +115,7 @@ function getByName(req, res) {
         // console.log(snapshot)
     });
 }
+exports.getByName = getByName;
 // Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,

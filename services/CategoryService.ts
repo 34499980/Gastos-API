@@ -1,3 +1,4 @@
+import { Category } from "../models/CategoryModel";
 
 const table = 'Category';
  //const admin = require('firebase-admin')
@@ -24,7 +25,7 @@ const { getFirestore, Timestamp, FieldValue, collection } = require('firebase-ad
  //const db = admin.database();
  const db = admin.firestore()
 // const db = admin.firestore();
-async function add(req, res,){
+export async function add(req, res,): Promise<number>{
   const date = new Date();
   
     const category = {
@@ -55,7 +56,7 @@ async function add(req, res,){
  
 }  
   
-async function edit(req, res){
+export async function edit(req, res): Promise<void>{
  
     var ref = db.collection(table);
     console.log(req.body.key)
@@ -68,15 +69,15 @@ async function edit(req, res){
                          })
      
     }
-function remove(req, res){
+export function remove(req, res){
 
     // Devolvemos una respuesta en JSON
         res.status(200).send({
             menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
         });
     }
-async function getAll(req, res){
-    let list = [];
+export async function getAll(): Promise<Category[]>{
+    let list: Category[] = [];
      return  await db.collection(table).get().then(snap => {
         snap.forEach(doc => {
             console.log(doc.data());
@@ -89,7 +90,7 @@ async function getAll(req, res){
     //snapshot.docs.map(doc => console.log(doc.data()));
     
 }
-async function getById(req, res){
+export async function getById(req): Promise<Category>{
     // return   await db.ref(table).on('name', req.body.name)
     
      return await db.collection(table).doc(req.body.key).get().then(snap => {
@@ -98,9 +99,9 @@ async function getById(req, res){
     // console.log(snapshot)
  }   
   
-async function getByName(req, res){
+export async function getByName(req): Promise<Category>{
    // return   await db.ref(table).on('name', req.body.name)
-    let entity;
+    let entity: Category;
     return await db.collection(table).where("name", "==", req.body.name).get().then(snap => {
         snap.forEach(doc => {
             console.log(doc.data());

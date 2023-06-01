@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,13 +33,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getById = exports.getByName = exports.getByPrivate = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
-var service = require('../services/CategoryService');
+const service = __importStar(require("../services/CategoryService"));
+//var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const list = yield getByPrivate(req, res);
-        if (list.length == 0) {
+        const entity = yield getByPrivate(req, res);
+        if (entity == undefined) {
             req.body.createdDate = helper.getNowWithHours();
             const key = yield service.add(req, res);
             req.body.key = key;
@@ -36,8 +60,8 @@ function add(req, res) {
 exports.add = add;
 function edit(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const list = yield getByPrivate(req, res);
-        if (list.length == 0) {
+        const entity = yield getByPrivate(req, res);
+        if (entity == undefined) {
             req.body.modifiedDate = helper.getNowWithHours();
             yield service.edit(req, res);
             res.status(200).send({
