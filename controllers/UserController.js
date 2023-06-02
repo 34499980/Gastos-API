@@ -48,12 +48,12 @@ function add(req, res) {
             req.body.modifiedDate = helper.getNowWithHours();
             service.edit(req, res);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
-                menssage: 'Se genero la categoria ' + req.body.name
+                menssage: 'Se genero el usuario ' + req.body.name
             });
         }
         else {
             res.status(500).send({
-                menssage: 'La categoria ' + req.body.name + ' ya existe'
+                menssage: 'El usuario ' + req.body.name + ' ya existe'
             });
         }
     });
@@ -73,12 +73,12 @@ function edit(req, res) {
             };
             yield service.edit(entity, res);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
-                menssage: 'Se actualizo la categoria ' + req.body.name
+                menssage: 'Se actualizo el usuario ' + req.body.name
             });
         }
         else {
             res.status(http_status_codes_1.StatusCodes.NOT_ACCEPTABLE).send({
-                menssage: 'La categoria ' + req.body.name + ' ya existe'
+                menssage: 'El usuario ' + req.body.name + ' ya existe'
             });
         }
     });
@@ -91,7 +91,7 @@ function remove(req, res) {
             service.remove(req);
         }
         res.status(200).send({
-            menssage: 'Se elimino la categoria: ' + dbEntity.name
+            menssage: 'Se elimino el usuario: ' + dbEntity.name
         });
     });
 }

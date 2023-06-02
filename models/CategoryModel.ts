@@ -1,7 +1,7 @@
-export interface Category {
+import { Auditory } from "./AuditoryModel";
+
+export interface Category extends Auditory {
     key?: string;
     name: string;
     image: string;
-    createdDate: string;
-    modifiedDate: string;
 }
