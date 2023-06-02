@@ -34,14 +34,6 @@ const db = admin.firestore();
 // const db = admin.firestore();
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const date = new Date();
-        const category = {
-            key: '',
-            name: req.body.name,
-            image: req.body.image,
-            createdDate: req.body.createdDate,
-            modifiedDate: ''
-        };
         return db.collection(table)
             .add({
             key: '',
@@ -70,10 +62,9 @@ function edit(req, res) {
     });
 }
 exports.edit = edit;
-function remove(req, res) {
-    // Devolvemos una respuesta en JSON
-    res.status(200).send({
-        menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
+function remove(req) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield db.collection(table).doc(req.body.key).delete();
     });
 }
 exports.remove = remove;

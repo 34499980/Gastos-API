@@ -26,7 +26,6 @@ const { getFirestore, Timestamp, FieldValue, collection } = require('firebase-ad
  const db = admin.firestore()
 // const db = admin.firestore();
 export async function add(req, res,): Promise<number>{
-  const date = new Date();
   
     
   

@@ -1,5 +1,6 @@
 import { Category } from '../models/CategoryModel';
-import * as service from  '../services/CategoryService'
+import * as service from  '../services/CategoryService';
+import {StatusCodes} from 'http-status-codes';
 //var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
@@ -13,7 +14,7 @@ export async function add(req, res,){
         req.body.modifiedDate = helper.getNowWithHours();
     
         service.edit(req, res)
-        res.status(200). send({
+        res.status(StatusCodes.CREATED). send({
          menssage: 'Se genero la categoria ' + req.body.name
      });
     } else {
@@ -37,11 +38,11 @@ export async function edit(req, res){
         } 
       
         await service.edit(entity, res);
-            res.status(200).send({
+            res.status(StatusCodes.CREATED).send({
                 menssage: 'Se actualizo la categoria ' + req.body.name
          });
     } else {
-        res.status(500). send({
+        res.status(StatusCodes.NOT_ACCEPTABLE). send({
             menssage: 'La categoria ' + req.body.name + ' ya existe'
         });
     }
@@ -58,7 +59,7 @@ export async function edit(req, res){
     }
 export async function getAll(req, res){
     let list = await service.getAll()
-    res.status(200).json(list);
+    res.status(StatusCodes.ACCEPTED).json(list);
  }
  export async function getByNamePrivate(req, res){
     let list =  await service.getByName(req)
@@ -66,11 +67,11 @@ export async function getAll(req, res){
  }
  export async function getByName(req, res){
     let list =  await service.getByName(req)
-    res.status(200).json(list);
+    res.status(StatusCodes.ACCEPTED).json(list);
  }
 export async function getById(req, res){
     let entity = await service.getById(req)
-    res.status(200).json(entity);
+    res.status(StatusCodes.ACCEPTED).json(entity);
  }
  export async function getByIdPrivate(req, res){
     return await service.getById(req)

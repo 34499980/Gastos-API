@@ -84,9 +84,14 @@ function edit(req, res) {
 }
 exports.edit = edit;
 function remove(req, res) {
-    // Devolvemos una respuesta en JSON
-    res.status(200).send({
-        menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
+    return __awaiter(this, void 0, void 0, function* () {
+        const dbEntity = yield getByIdPrivate(req, res);
+        if (dbEntity) {
+            service.remove(req);
+        }
+        res.status(200).send({
+            menssage: 'Se elimino la categoria: ' + dbEntity.name
+        });
     });
 }
 exports.remove = remove;
