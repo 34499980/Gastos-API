@@ -1,7 +1,7 @@
 import { Auditory } from "./AuditoryModel";
 
 export interface User extends Auditory {
-    id: number;
+    key: string;
     name: string;
     mail: string;    
     password: string;

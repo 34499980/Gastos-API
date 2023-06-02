@@ -1,5 +1,5 @@
-import { Category as User } from '../models/CategoryModel';
-import * as service from  '../services/CategoryService';
+import { User } from '../models/UserModel';
+import * as service from  '../services/UserService';
 import {StatusCodes} from 'http-status-codes';
 //var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
@@ -33,7 +33,8 @@ export async function edit(req, res){
         key: req.body.key,
         createdDate: req.body.createdDate,
         name: req.body.name,  
-        image: req.body.image,          
+        mail: req.body.mail, 
+        password : req.password,         
         modifiedDate: helper.getNowWithHours()
         } 
       

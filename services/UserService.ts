@@ -35,7 +35,7 @@ export async function add(req, res,): Promise<number>{
   .add({
     key: '',
     name: req.body.name,
-    email: req.body.email,
+    mail: req.body.mail,
     password: req.body.password,
     createdDate: req.body.createdDate,
     modifiedDate: ''
@@ -59,7 +59,7 @@ export async function edit(req, res): Promise<void>{
             upref.update( {
                                     key: req.key,
                                     name: req.name,
-                                    email: req.email,
+                                    mail: req.mail,
                                     password: req.password,
                                     createdDate: req.createdDate,
                                     modifiedDate: req.modifiedDate
