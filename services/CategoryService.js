@@ -32,14 +32,14 @@ const firebaseConfig = {
 //const db = admin.database();
 const db = admin.firestore();
 // const db = admin.firestore();
-function add(req, res) {
+function add(req) {
     return __awaiter(this, void 0, void 0, function* () {
         return db.collection(table)
             .add({
             key: '',
-            name: req.body.name,
-            image: req.body.image,
-            createdDate: req.body.createdDate,
+            name: req.name,
+            image: req.image,
+            createdDate: req.createdDate,
             modifiedDate: ''
         }).then(response => {
             return response.id;
@@ -47,7 +47,7 @@ function add(req, res) {
     });
 }
 exports.add = add;
-function edit(req, res) {
+function edit(req) {
     return __awaiter(this, void 0, void 0, function* () {
         var ref = db.collection(table);
         console.log(req.key);

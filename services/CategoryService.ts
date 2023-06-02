@@ -25,7 +25,7 @@ const { getFirestore, Timestamp, FieldValue, collection } = require('firebase-ad
  //const db = admin.database();
  const db = admin.firestore()
 // const db = admin.firestore();
-export async function add(req, res,): Promise<number>{
+export async function add(req): Promise<string>{
   
     
   
@@ -33,9 +33,9 @@ export async function add(req, res,): Promise<number>{
   
   .add({
     key: '',
-    name: req.body.name,
-    image: req.body.image,
-    createdDate: req.body.createdDate,
+    name: req.name,
+    image: req.image,
+    createdDate: req.createdDate,
     modifiedDate: ''
 }).then(response => {
   
@@ -49,7 +49,7 @@ export async function add(req, res,): Promise<number>{
  
 }  
   
-export async function edit(req, res): Promise<void>{
+export async function edit(req): Promise<void>{
  
     var ref = db.collection(table);
     console.log(req.key)

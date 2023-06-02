@@ -42,11 +42,17 @@ function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const entity = yield getByNamePrivate(req, res);
         if (entity == undefined) {
-            req.body.createdDate = helper.getNowWithHours();
-            const key = yield service.add(req, res);
-            req.body.key = key;
-            req.body.modifiedDate = helper.getNowWithHours();
-            service.edit(req, res);
+            const newEntity = {
+                key: '',
+                name: req.body.name,
+                image: req.body.image,
+                createdDate: helper.getNowWithHours(),
+                modifiedDate: ''
+            };
+            const key = yield service.add(newEntity);
+            newEntity.key = key;
+            // req.body.modifiedDate = helper.getNowWithHours();
+            service.edit(newEntity);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
                 menssage: 'Se genero la categoria ' + req.body.name
             });
@@ -71,7 +77,7 @@ function edit(req, res) {
                 image: req.body.image,
                 modifiedDate: helper.getNowWithHours()
             };
-            yield service.edit(entity, res);
+            yield service.edit(entity);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
                 menssage: 'Se actualizo la categoria ' + req.body.name
             });

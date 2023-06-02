@@ -1,19 +1,25 @@
 import { User } from '../models/UserModel';
 import * as service from  '../services/UserService';
 import {StatusCodes} from 'http-status-codes';
-//var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 
 export async function add(req, res,){
     const entity = await getByNamePrivate(req, res)
     if(entity == undefined) {
-        req.body.createdDate = helper.getNowWithHours();
-        const  key = await service.add(req,res);  
-        req.body.key = key;
-        req.body.modifiedDate = helper.getNowWithHours();
-    
-        service.edit(req, res)
+        const newEntity: User = {
+            createdDate: helper.getNowWithHours(),
+            mail: req.body.mail,
+            modifiedDate: '',
+            name: req.body.name,
+            password: req.body.password,
+            key: ''
+        }
+        const  key = await service.add(newEntity); 
+       
+        newEntity.key = key;
+      
+        service.edit(newEntity)
         res.status(StatusCodes.CREATED). send({
          menssage: 'Se genero el usuario ' + req.body.name
      });
@@ -34,11 +40,11 @@ export async function edit(req, res){
         createdDate: req.body.createdDate,
         name: req.body.name,  
         mail: req.body.mail, 
-        password : req.password,         
+        password : req.body.password,         
         modifiedDate: helper.getNowWithHours()
         } 
       
-        await service.edit(entity, res);
+        await service.edit(entity);
             res.status(StatusCodes.CREATED).send({
                 menssage: 'Se actualizo el usuario ' + req.body.name
          });

@@ -8,12 +8,19 @@ const res = require('express/lib/response');
 export async function add(req, res,){
     const entity = await getByNamePrivate(req, res)
     if(entity == undefined) {
-        req.body.createdDate = helper.getNowWithHours();
-        const  key = await service.add(req,res);  
-        req.body.key = key;
-        req.body.modifiedDate = helper.getNowWithHours();
+        const newEntity: Category ={
+            key: '',
+            name: req.body.name,
+            image: req.body.image,
+            createdDate: helper.getNowWithHours(),
+            modifiedDate: ''
+        }
+        const  key = await service.add(newEntity);  
+        newEntity.key = key;
+        
+       // req.body.modifiedDate = helper.getNowWithHours();
     
-        service.edit(req, res)
+        service.edit(newEntity)
         res.status(StatusCodes.CREATED). send({
          menssage: 'Se genero la categoria ' + req.body.name
      });
@@ -37,7 +44,7 @@ export async function edit(req, res){
         modifiedDate: helper.getNowWithHours()
         } 
       
-        await service.edit(entity, res);
+        await service.edit(entity);
             res.status(StatusCodes.CREATED).send({
                 menssage: 'Se actualizo la categoria ' + req.body.name
          });

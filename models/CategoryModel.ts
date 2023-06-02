@@ -1,7 +1,7 @@
 import { Auditory } from "./AuditoryModel";
 
 export interface Category extends Auditory {
-    key?: string;
+    key: string;
     name: string;
     image: string;
 }

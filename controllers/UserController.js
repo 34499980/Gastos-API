@@ -33,20 +33,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getByIdPrivate = exports.getById = exports.getByName = exports.getByNamePrivate = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
-const service = __importStar(require("../services/CategoryService"));
+const service = __importStar(require("../services/UserService"));
 const http_status_codes_1 = require("http-status-codes");
-//var service = require('../services/CategoryService');
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const entity = yield getByNamePrivate(req, res);
         if (entity == undefined) {
-            req.body.createdDate = helper.getNowWithHours();
-            const key = yield service.add(req, res);
-            req.body.key = key;
-            req.body.modifiedDate = helper.getNowWithHours();
-            service.edit(req, res);
+            const newEntity = {
+                createdDate: helper.getNowWithHours(),
+                mail: req.body.mail,
+                modifiedDate: '',
+                name: req.body.name,
+                password: req.body.password,
+                key: ''
+            };
+            const key = yield service.add(newEntity);
+            newEntity.key = key;
+            service.edit(newEntity);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
                 menssage: 'Se genero el usuario ' + req.body.name
             });
@@ -68,10 +73,11 @@ function edit(req, res) {
                 key: req.body.key,
                 createdDate: req.body.createdDate,
                 name: req.body.name,
-                image: req.body.image,
+                mail: req.body.mail,
+                password: req.body.password,
                 modifiedDate: helper.getNowWithHours()
             };
-            yield service.edit(entity, res);
+            yield service.edit(entity);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
                 menssage: 'Se actualizo el usuario ' + req.body.name
             });
