@@ -28,13 +28,7 @@ const { getFirestore, Timestamp, FieldValue, collection } = require('firebase-ad
 export async function add(req, res,): Promise<number>{
   const date = new Date();
   
-    const category = {
-        key: '',
-        name: req.body.name,
-        image: req.body.image,
-        createdDate: req.body.createdDate,
-        modifiedDate: ''
-    }
+    
   
   return db.collection(table)
   
@@ -70,12 +64,8 @@ export async function edit(req, res): Promise<void>{
                          })
      
     }
-export function remove(req, res){
-
-    // Devolvemos una respuesta en JSON
-        res.status(200).send({
-            menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
-        });
+export async function remove(req){
+     await db.collection(table).doc(req.body.key).delete();
     }
 export async function getAll(): Promise<Category[]>{
     let list: Category[] = [];

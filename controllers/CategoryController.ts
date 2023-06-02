@@ -47,11 +47,13 @@ export async function edit(req, res){
     }
    
  }
- export function remove(req, res){
-
-    // Devolvemos una respuesta en JSON
+ export async function remove(req, res){
+    const dbEntity = await getByIdPrivate(req, res)   
+        if(dbEntity){
+            service.remove(req);
+        }
         res.status(200).send({
-            menssage: 'Esta ruta es de prueba en mi api restful con mongo y node'
+            menssage: 'Se elimino la categoria: '+ dbEntity.name
         });
     }
 export async function getAll(req, res){
