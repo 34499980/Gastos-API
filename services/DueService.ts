@@ -47,7 +47,7 @@ export async function edit(req): Promise<void>{
      
     }
 export async function remove(req){
-     await db.collection(table).doc(req.body.key).delete();
+     await db.collection(table).doc(req.key).delete();
     }
 export async function getAll(): Promise<Due[]>{
     let list: Due[] = [];

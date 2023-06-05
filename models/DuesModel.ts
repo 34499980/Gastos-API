@@ -3,6 +3,6 @@ export interface Due{
     amount: number;
     countDues: number;
     actualCount: number;
-    movementKey: number;
+    movementKey: string;
     
 }

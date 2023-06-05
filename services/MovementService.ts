@@ -59,7 +59,7 @@ export async function edit(req): Promise<void>{
 export async function remove(req){
      await db.collection(table).doc(req.body.key).delete();
     }
-export async function getAllYears(): Promise<Movement[]>{
+export async function getAllYears(req): Promise<Movement[]>{
     let list: Movement[] = [];
      return  await db.collection(table).get().then(snap => {
         snap.forEach(doc => {
