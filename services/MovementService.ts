@@ -15,11 +15,16 @@ export async function add(req): Promise<string>{
   
   .add({
     key: '',
-    name: req.name,
-    mail: req.mail,
-    password: req.password,
+    description: req.description,
+    amount: req.amount,
+    typeKey: req.typeKey,
+    categoryKey: req.categoryKey,
+    year: req.year,
+    month: req.month,
+    dueKey: req.dueKey,
     createdDate: req.createdDate,
-    modifiedDate: ''
+    modifiedDate: '',
+    createdBy: req.createdBy   
 }).then(response => {
   
     return response.id;
@@ -37,12 +42,17 @@ export async function edit(req): Promise<void>{
     var ref = db.collection(table);   
     var upref = ref.doc(req.key);
             upref.update( {
-                                    key: req.key,
-                                    name: req.name,
-                                    mail: req.mail,
-                                    password: req.password,
-                                    createdDate: req.createdDate,
-                                    modifiedDate: req.modifiedDate
+                key: req.key,
+                description: req.description,
+                amount: req.amount,
+                typeKey: req.typeKey,
+                categoryKey: req.categoryKey,
+                year: req.year,
+                month: req.month,
+                dueKey: req.dueKey,
+                createdDate: req.createdDate,
+                modifiedDate: req.modifiedDate,
+                createdBy: req.createdBy   
                          })
      
     }
@@ -75,7 +85,7 @@ export async function getById(req): Promise<Movement>{
 export async function getByMonth(req): Promise<Movement[]>{
    // return   await db.ref(table).on('name', req.body.name)
     let list: Movement[];
-    return await db.collection(table).where("name", "==", req.body.name)
+    return await db.collection(table).where("month", "==", req.body.month)
                                    //  .where("mail", "array-contains", req.body.name)
                                      .get().then(snap => {
         snap.forEach(doc => {

@@ -1,13 +1,15 @@
-export interface Movement {
-    idMovement: number;
+import { Auditory } from "./AuditoryModel";
+
+export interface Movement extends Auditory{
+    key: number;
     description: string;
     amount: number;
-    idType: number;
-    idCategory: number;
-    //public int IdMes; revisar para que es
+    typeKey: number;
+    categoryKey: number;
+    month: number;
     year: number;
-    due: number; // revisar
-    cant: number; // revisar
-    idUser: number;
-    createdDate: Date;
+    dueKey: number; // revisar   
+    createdDate: string;
+    modifiedDate: string;
+    createdBy: string;
 }

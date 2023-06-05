@@ -1,8 +1,8 @@
 export interface Due{
-    idDue: number;
-    idAmount: number;
+    key: string;
+    amount: number;
     countDues: number;
     actualCount: number;
-    idMovements: number;
-    month: number;
+    movementKey: number;
+    
 }
