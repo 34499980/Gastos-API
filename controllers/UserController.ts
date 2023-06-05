@@ -13,7 +13,8 @@ export async function add(req, res,){
             modifiedDate: '',
             name: req.body.name,
             password: req.body.password,
-            key: ''
+            key: '',
+            createdBy: ''
         }
         const  key = await service.add(newEntity); 
        
@@ -41,7 +42,8 @@ export async function edit(req, res){
         name: req.body.name,  
         mail: req.body.mail, 
         password : req.body.password,         
-        modifiedDate: helper.getNowWithHours()
+        modifiedDate: helper.getNowWithHours(),
+        createdBy: ''
         } 
       
         await service.edit(entity);

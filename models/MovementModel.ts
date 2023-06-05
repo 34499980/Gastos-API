@@ -1,7 +1,7 @@
 import { Auditory } from "./AuditoryModel";
 
 export interface Movement extends Auditory{
-    key: number;
+    key: string;
     description: string;
     amount: number;
     typeKey: number;
