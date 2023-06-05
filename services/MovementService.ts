@@ -85,8 +85,9 @@ export async function getById(req): Promise<Movement>{
 export async function getByMonth(req): Promise<Movement[]>{
    // return   await db.ref(table).on('name', req.body.name)
     let list: Movement[];
-    return await db.collection(table).where("month", "==", req.body.month)
-                                   //  .where("mail", "array-contains", req.body.name)
+    return await db.collection(table).where("month", ">=", req.body.month)
+                                     .where("month", "<=", req.body.month)
+                                     .where("year", "==", req.body.year)
                                      .get().then(snap => {
         snap.forEach(doc => {
             console.log(doc.data());
