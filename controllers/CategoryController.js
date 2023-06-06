@@ -47,7 +47,8 @@ function add(req, res) {
                 name: req.body.name,
                 image: req.body.image,
                 createdDate: helper.getNowWithHours(),
-                modifiedDate: ''
+                modifiedDate: '',
+                createdBy: ''
             };
             const key = yield service.add(newEntity);
             newEntity.key = key;
@@ -75,7 +76,8 @@ function edit(req, res) {
                 createdDate: req.body.createdDate,
                 name: req.body.name,
                 image: req.body.image,
-                modifiedDate: helper.getNowWithHours()
+                modifiedDate: helper.getNowWithHours(),
+                createdBy: ''
             };
             yield service.edit(entity);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({

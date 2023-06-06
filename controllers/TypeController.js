@@ -32,34 +32,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByIdPrivate = exports.getById = exports.getByName = exports.getByNamePrivate = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
-const service = __importStar(require("../services/UserService"));
+exports.getById = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
+const service = __importStar(require("../services/TypeService"));
 const http_status_codes_1 = require("http-status-codes");
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const entity = yield getByNamePrivate(req, res);
-        if (entity == undefined) {
+        const entity = yield service.getAll();
+        if (!entity.find(x => x.description == req.body.description)) {
             const newEntity = {
-                createdDate: helper.getNowWithHours(),
-                mail: req.body.mail,
-                modifiedDate: '',
-                name: req.body.name,
-                password: req.body.password,
-                key: '',
-                createdBy: ''
+                description: req.body.description,
+                key: ''
             };
             const key = yield service.add(newEntity);
             newEntity.key = key;
             service.edit(newEntity);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
-                menssage: 'Se genero el usuario ' + req.body.name
+                menssage: 'Se genero el tipo ' + req.body.description
             });
         }
         else {
             res.status(500).send({
-                menssage: 'El usuario ' + req.body.name + ' ya existe'
+                menssage: 'El tipo ' + req.body.description + ' ya existe'
             });
         }
     });
@@ -67,26 +62,21 @@ function add(req, res) {
 exports.add = add;
 function edit(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const dbEntity = yield getByNamePrivate(req, res);
+        const dbEntity = yield service.getById(req);
         console.log(dbEntity);
         if (dbEntity == undefined || dbEntity.key == req.body.key) {
             const entity = {
                 key: req.body.key,
-                createdDate: req.body.createdDate,
-                name: req.body.name,
-                mail: req.body.mail,
-                password: req.body.password,
-                modifiedDate: helper.getNowWithHours(),
-                createdBy: ''
+                description: req.body.description
             };
             yield service.edit(entity);
             res.status(http_status_codes_1.StatusCodes.CREATED).send({
-                menssage: 'Se actualizo el usuario ' + req.body.name
+                menssage: 'Se actualizo el tipo ' + req.body.description
             });
         }
         else {
             res.status(http_status_codes_1.StatusCodes.NOT_ACCEPTABLE).send({
-                menssage: 'El usuario ' + req.body.name + ' ya existe'
+                menssage: 'El tipo ' + req.body.description + ' ya existe'
             });
         }
     });
@@ -94,12 +84,12 @@ function edit(req, res) {
 exports.edit = edit;
 function remove(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const dbEntity = yield getByIdPrivate(req, res);
+        const dbEntity = yield service.getById(req);
         if (dbEntity) {
             service.remove(req);
         }
         res.status(200).send({
-            menssage: 'Se elimino el usuario: ' + dbEntity.name
+            menssage: 'Se elimino el tipo: ' + dbEntity.description
         });
     });
 }
@@ -111,20 +101,6 @@ function getAll(req, res) {
     });
 }
 exports.getAll = getAll;
-function getByNamePrivate(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let list = yield service.getByName(req);
-        return list;
-    });
-}
-exports.getByNamePrivate = getByNamePrivate;
-function getByName(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let list = yield service.getByName(req);
-        res.status(http_status_codes_1.StatusCodes.ACCEPTED).json(list);
-    });
-}
-exports.getByName = getByName;
 function getById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let entity = yield service.getById(req);
@@ -132,18 +108,11 @@ function getById(req, res) {
     });
 }
 exports.getById = getById;
-function getByIdPrivate(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield service.getById(req);
-    });
-}
-exports.getByIdPrivate = getByIdPrivate;
 // Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,
     remove,
     getAll,
-    getByName,
     getById
 };

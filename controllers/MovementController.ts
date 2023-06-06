@@ -26,10 +26,12 @@ export async function add(req, res,){
     if(newEntity.dueBool != undefined) {
          dueEntity = {
             key: '',
-            amount: req.body.due.amount,
-            actualCount: 0,
+            amount: req.body.due.totalAmount / req.body.due.countDues,
+            actualCount: 1,
             countDues: req.body.due.countDues,
-            movementKey: ''
+            movementKey: '',
+            totalAmount: req.body.due.totalAmount
+            
         }
         dueEntity.key = await duesService.add(dueEntity);
         newEntity.dueKey = dueEntity.key
@@ -63,10 +65,11 @@ export async function edit(req, res){
             let due = await duesService.getByMovementId(newEntity.key)
             due = {
                 key: due.key,
-                amount: req.body.amount?? due.amount,
+                amount: req.body.due.totalAmount / req.body.due.countDues?? due.countDues,
                 actualCount: due.key == undefined? 1 : due.actualCount,
-                countDues: req.body.countDues?? due.countDues,
-                movementKey: due.movementKey
+                countDues: req.body.due.countDues?? due.countDues,
+                movementKey: due.movementKey,
+                totalAmount: req.body.due.totalAmount
             }            
             await duesService.edit(due);
 
@@ -113,7 +116,6 @@ export async function getById(req, res){
    res.status(StatusCodes.ACCEPTED).json(entity);
 }
  
-// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,

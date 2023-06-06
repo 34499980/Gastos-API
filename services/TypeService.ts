@@ -1,7 +1,8 @@
 import { Due } from "../models/DuesModel";
+import { Item } from "../models/ItemModel";
 
 
-const table = 'Due';
+const table = 'Type';
 
  const admin = require('firebase-admin');
  
@@ -14,12 +15,8 @@ export async function add(req): Promise<string>{
   return db.collection(table)
   
   .add({
-        key: '',
-        amount: req.countDues,
-        actualCount: req.actualCount,
-        countDues: req.countDues,
-        movementKey: req.movementKey,
-        totalAmount: req.totalAmount
+    key: '',
+    name: req.description    
 }).then(response => {
   
     return response.id;
@@ -37,20 +34,17 @@ export async function edit(req): Promise<void>{
     var ref = db.collection(table);   
     var upref = ref.doc(req.key);
             upref.update( {
-                        key: req.key,
-                        amount: req.countDues,
-                        actualCount: req.actualCount,
-                        countDues: req.countDues,
-                        movementKey: req.movementKey,
-                        totalAmount: req.totalAmount
+                                    key: req.key,
+                                    description: req.description,
+                                    
                          })
      
     }
 export async function remove(req){
      await db.collection(table).doc(req.key).delete();
     }
-export async function getAll(): Promise<Due[]>{
-    let list: Due[] = [];
+export async function getAll(): Promise<Item[]>{
+    let list: Item[] = [];
      return  await db.collection(table).get().then(snap => {
         snap.forEach(doc => {
             console.log(doc.data());
@@ -59,23 +53,24 @@ export async function getAll(): Promise<Due[]>{
         });
         return list;
     });  
-   // console.log(snapshot)
-    //snapshot.docs.map(doc => console.log(doc.data()));
+   
     
 }
-export async function getByMovementId(req): Promise<Due>{
-    // return   await db.ref(table).on('name', req.body.name)
-    
+export async function getById(req): Promise<Item>{
+   
      return await db.collection(table).doc(req.body.key).get().then(snap => {
         return snap.data()
     });     
-    // console.log(snapshot)
+ 
  }   
+  
+  
 
+// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,
     remove,
     getAll,
-    getByMovementId
+    getById
 };

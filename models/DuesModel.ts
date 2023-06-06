@@ -4,5 +4,6 @@ export interface Due{
     countDues: number;
     actualCount: number;
     movementKey: string;
+    totalAmount: number;
     
 }

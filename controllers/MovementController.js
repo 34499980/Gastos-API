@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,39 +33,131 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getById = exports.getByMonth = exports.getAllYears = exports.remove = exports.edit = exports.add = void 0;
+const service = __importStar(require("../services/MovementService"));
+const duesService = __importStar(require("../services/DueService"));
+const http_status_codes_1 = require("http-status-codes");
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        let dueEntity;
+        const newEntity = {
+            key: req.body.key,
+            description: req.body.description,
+            amount: req.body.amount,
+            typeKey: req.body.typeKey,
+            categoryKey: req.body.categoryKey,
+            year: req.body.year,
+            month: req.body.month,
+            dueKey: req.body.dueKey,
+            createdDate: req.body.createdDate,
+            modifiedDate: helper.getNowWithHours(),
+            createdBy: req.body.createdBy,
+            dueBool: req.body.dueBool
+        };
+        if (newEntity.dueBool != undefined) {
+            dueEntity = {
+                key: '',
+                amount: req.body.due.totalAmount / req.body.due.countDues,
+                actualCount: 1,
+                countDues: req.body.due.countDues,
+                movementKey: '',
+                totalAmount: req.body.due.totalAmount
+            };
+            dueEntity.key = yield duesService.add(dueEntity);
+            newEntity.dueKey = dueEntity.key;
+        }
+        dueEntity.key = yield service.add(newEntity);
+        yield service.edit(dueEntity);
+        res.status(http_status_codes_1.StatusCodes.CREATED).send({
+            menssage: 'Se genero el movimiento'
+        });
     });
 }
 exports.add = add;
 function edit(req, res) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
+        const dbEntity = yield getById(req, res);
+        console.log(dbEntity);
+        if (dbEntity != undefined) {
+            const newEntity = {
+                key: req.body.key,
+                description: req.body.description,
+                amount: req.body.amount,
+                typeKey: req.body.typeKey,
+                categoryKey: req.body.categoryKey,
+                year: req.body.year,
+                month: req.body.month,
+                dueKey: req.body.dueKey,
+                createdDate: req.body.createdDate,
+                modifiedDate: helper.getNowWithHours(),
+                createdBy: req.body.createdBy,
+                dueBool: req.body.dueBool
+            };
+            if (newEntity.dueBool != undefined) {
+                let due = yield duesService.getByMovementId(newEntity.key);
+                due = {
+                    key: due.key,
+                    amount: (_a = req.body.due.totalAmount / req.body.due.countDues) !== null && _a !== void 0 ? _a : due.countDues,
+                    actualCount: due.key == undefined ? 1 : due.actualCount,
+                    countDues: (_b = req.body.due.countDues) !== null && _b !== void 0 ? _b : due.countDues,
+                    movementKey: due.movementKey,
+                    totalAmount: req.body.due.totalAmount
+                };
+                yield duesService.edit(due);
+            }
+            service.edit(newEntity);
+            res.status(http_status_codes_1.StatusCodes.CREATED).send({
+                menssage: 'Se actualizo el movimiento'
+            });
+        }
     });
 }
 exports.edit = edit;
 function remove(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const dbEntity = yield service.getById(req.body.key);
+        if (dbEntity.dueBool) {
+            const due = yield duesService.getByMovementId(dbEntity.key);
+            yield duesService.remove(due);
+        }
+        if (dbEntity != undefined) {
+            service.remove(req);
+            res.status(http_status_codes_1.StatusCodes.ACCEPTED).send({
+                menssage: 'Se elimino el movimiento'
+            });
+        }
     });
 }
 exports.remove = remove;
 function getAllYears(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const list = yield service.getAllYears(req);
+        res.status(http_status_codes_1.StatusCodes.ACCEPTED).json(list);
     });
 }
 exports.getAllYears = getAllYears;
 function getByMonth(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const list = yield service.getByMonth(req);
+        let index;
+        for (index = 0; index < list.length; index++) {
+            if (list[index].dueBool) {
+                list[index].due = yield duesService.getByMovementId(list[index].key);
+            }
+        }
+        res.status(http_status_codes_1.StatusCodes.ACCEPTED).json(list);
     });
 }
 exports.getByMonth = getByMonth;
 function getById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const entity = yield service.getById(req);
+        res.status(http_status_codes_1.StatusCodes.ACCEPTED).json(entity);
     });
 }
 exports.getById = getById;
-// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,

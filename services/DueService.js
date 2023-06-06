@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByMonth = exports.getById = exports.getAllYears = exports.remove = exports.edit = exports.add = void 0;
-const table = 'Movement';
+exports.getByMovementId = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
+const table = 'Due';
 const admin = require('firebase-admin');
 const db = admin.firestore();
 function add(req) {
@@ -18,16 +18,11 @@ function add(req) {
         return db.collection(table)
             .add({
             key: '',
-            description: req.description,
-            amount: req.amount,
-            typeKey: req.typeKey,
-            categoryKey: req.categoryKey,
-            year: req.year,
-            month: req.month,
-            dueKey: req.dueKey,
-            createdDate: req.createdDate,
-            modifiedDate: '',
-            createdBy: req.createdBy
+            amount: req.countDues,
+            actualCount: req.actualCount,
+            countDues: req.countDues,
+            movementKey: req.movementKey,
+            totalAmount: req.totalAmount
         }).then(response => {
             return response.id;
         });
@@ -40,27 +35,22 @@ function edit(req) {
         var upref = ref.doc(req.key);
         upref.update({
             key: req.key,
-            description: req.description,
-            amount: req.amount,
-            typeKey: req.typeKey,
-            categoryKey: req.categoryKey,
-            year: req.year,
-            month: req.month,
-            dueKey: req.dueKey,
-            createdDate: req.createdDate,
-            modifiedDate: req.modifiedDate,
-            createdBy: req.createdBy
+            amount: req.countDues,
+            actualCount: req.actualCount,
+            countDues: req.countDues,
+            movementKey: req.movementKey,
+            totalAmount: req.totalAmount
         });
     });
 }
 exports.edit = edit;
 function remove(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield db.collection(table).doc(req.body.key).delete();
+        yield db.collection(table).doc(req.key).delete();
     });
 }
 exports.remove = remove;
-function getAllYears(req) {
+function getAll() {
     return __awaiter(this, void 0, void 0, function* () {
         let list = [];
         return yield db.collection(table).get().then(snap => {
@@ -74,8 +64,8 @@ function getAllYears(req) {
         //snapshot.docs.map(doc => console.log(doc.data()));
     });
 }
-exports.getAllYears = getAllYears;
-function getById(req) {
+exports.getAll = getAll;
+function getByMovementId(req) {
     return __awaiter(this, void 0, void 0, function* () {
         // return   await db.ref(table).on('name', req.body.name)
         return yield db.collection(table).doc(req.body.key).get().then(snap => {
@@ -84,31 +74,11 @@ function getById(req) {
         // console.log(snapshot)
     });
 }
-exports.getById = getById;
-function getByMonth(req) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // return   await db.ref(table).on('name', req.body.name)
-        let list;
-        return yield db.collection(table).where("month", ">=", req.body.month)
-            .where("month", "<=", req.body.month)
-            .where("year", "==", req.body.year)
-            .get().then(snap => {
-            snap.forEach(doc => {
-                console.log(doc.data());
-                list.push(doc.data());
-            });
-            return list;
-        });
-        // console.log(snapshot)
-    });
-}
-exports.getByMonth = getByMonth;
-// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
+exports.getByMovementId = getByMovementId;
 module.exports = {
     add,
     edit,
     remove,
-    getAllYears,
-    getByMonth,
-    getById
+    getAll,
+    getByMovementId
 };
