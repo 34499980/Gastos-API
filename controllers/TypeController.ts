@@ -6,6 +6,8 @@ const res = require('express/lib/response');
 
 export async function add(req, res,){
     const entity = await service.getAll()
+    console.log(entity)
+    console.log(req.data)
     if(!entity.find(x => x.description == req.body.description)) {
         const newEntity: Item = {           
             description: req.body.description,            

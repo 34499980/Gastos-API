@@ -10,13 +10,13 @@ const table = 'Type';
 
 export async function add(req): Promise<string>{
   
-    
+   
   
   return db.collection(table)
   
   .add({
     key: '',
-    name: req.description    
+    description: req.description    
 }).then(response => {
   
     return response.id;

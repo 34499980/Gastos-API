@@ -40,6 +40,8 @@ const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const entity = yield service.getAll();
+        console.log(entity);
+        console.log(req.data);
         if (!entity.find(x => x.description == req.body.description)) {
             const newEntity = {
                 description: req.body.description,

@@ -18,7 +18,7 @@ function add(req) {
         return db.collection(table)
             .add({
             key: '',
-            name: req.description
+            description: req.description
         }).then(response => {
             return response.id;
         });
