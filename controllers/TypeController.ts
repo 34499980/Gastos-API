@@ -1,7 +1,7 @@
 import { Item } from '../models/ItemModel';
 import * as service from  '../services/TypeService';
 import {StatusCodes} from 'http-status-codes';
-var helper = require('../helpers/Time');
+import * as helper from '../helpers/Time';
 const res = require('express/lib/response');
 
 export async function add(req, res,){

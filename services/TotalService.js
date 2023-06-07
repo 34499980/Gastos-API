@@ -9,26 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByName = exports.getById = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
-const table = 'Category';
+exports.getById = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
+const table = 'Total';
 //const admin = require('firebase-admin')
 const admin = require('firebase-admin');
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue, collection } = require('firebase-admin/firestore');
-var serviceAccount = require("../gastosdiarios-e2f45-firebase-adminsdk-jesw0-d61e0f952c.json");
+/*var serviceAccount = require("../gastosdiarios-e2f45-firebase-adminsdk-jesw0-d61e0f952c.json");
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://gastosdiarios-e2f45-default-rtdb.firebaseio.com"
-});
-const firebaseConfig = {
-    apiKey: "AIzaSyAJBXrm_vFWN-zpjuY6EHCQVPfYWtWE740",
-    authDomain: "gastosdiarios-e2f45.firebaseapp.com",
-    projectId: "gastosdiarios-e2f45",
-    storageBucket: "gastosdiarios-e2f45.appspot.com",
-    messagingSenderId: "436280068960",
-    appId: "1:436280068960:web:ad9f396c062286f4a8ac05",
-    measurementId: "G-XL8PN6CYMJ"
-};
+   credential: admin.credential.cert(serviceAccount),
+   databaseURL: "https://gastosdiarios-e2f45-default-rtdb.firebaseio.com"
+ });
+ const firebaseConfig = {
+   apiKey: "AIzaSyAJBXrm_vFWN-zpjuY6EHCQVPfYWtWE740",
+   authDomain: "gastosdiarios-e2f45.firebaseapp.com",
+   projectId: "gastosdiarios-e2f45",
+   storageBucket: "gastosdiarios-e2f45.appspot.com",
+   messagingSenderId: "436280068960",
+   appId: "1:436280068960:web:ad9f396c062286f4a8ac05",
+   measurementId: "G-XL8PN6CYMJ"
+ };*/
 //const db = admin.database();
 const db = admin.firestore();
 // const db = admin.firestore();
@@ -37,10 +37,11 @@ function add(req) {
         return db.collection(table)
             .add({
             key: '',
-            name: req.name,
-            image: req.image,
-            createdDate: req.createdDate,
-            modifiedDate: ''
+            year: req.year,
+            month: req.month,
+            input: req.input,
+            buy: req.buy,
+            balance: req.balance
         }).then(response => {
             return response.id;
         });
@@ -53,10 +54,11 @@ function edit(req) {
         var upref = ref.doc(req.key);
         upref.update({
             key: req.key,
-            name: req.name,
-            image: req.image,
-            modifiedDate: req.modifiedDate,
-            createdDate: req.createdDate
+            year: req.year,
+            month: req.month,
+            input: req.input,
+            buy: req.buy,
+            balance: req.balance
         });
     });
 }
@@ -87,23 +89,10 @@ function getById(req) {
     });
 }
 exports.getById = getById;
-function getByName(req) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let entity;
-        return yield db.collection(table).where("name", "==", req.body.name).get().then(snap => {
-            snap.forEach(doc => {
-                entity = doc.data();
-            });
-            return entity;
-        });
-    });
-}
-exports.getByName = getByName;
 module.exports = {
     add,
     edit,
     remove,
     getAll,
-    getByName,
     getById
 };

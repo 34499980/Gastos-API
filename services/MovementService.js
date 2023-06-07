@@ -74,7 +74,6 @@ function getAllYears(req) {
 exports.getAllYears = getAllYears;
 function getById(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(req.key);
         return yield db.collection(table).doc(req.key).get().then(snap => {
             return snap.data();
         });

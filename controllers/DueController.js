@@ -36,7 +36,7 @@ exports.getAll = exports.processByMonth = void 0;
 const service = __importStar(require("../services/DueService"));
 const movementService = __importStar(require("../services/MovementService"));
 const http_status_codes_1 = require("http-status-codes");
-var helper = require('../helpers/Time');
+const helper = __importStar(require("../helpers/Time"));
 const res = require('express/lib/response');
 function processByMonth(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

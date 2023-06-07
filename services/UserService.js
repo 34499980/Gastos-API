@@ -96,7 +96,6 @@ function getByName(req) {
             //  .where("mail", "array-contains", req.body.name)
             .get().then(snap => {
             snap.forEach(doc => {
-                console.log(doc.data());
                 entity = doc.data();
             });
             return entity;

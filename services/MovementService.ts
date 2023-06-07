@@ -70,8 +70,8 @@ export async function getAllYears(req): Promise<Movement[]>{
     });  
     
 }
-export async function getById(req): Promise<Movement>{   
-    console.log(req.key)
+export async function getById(req): Promise<Movement>{  
+   
      return await db.collection(table).doc(req.key).get().then(snap => {
         return snap.data()
     });     

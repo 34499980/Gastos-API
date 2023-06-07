@@ -35,7 +35,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getById = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
 const service = __importStar(require("../services/TypeService"));
 const http_status_codes_1 = require("http-status-codes");
-var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -4,7 +4,7 @@ import * as duesService from  '../services/DueService';
 import {StatusCodes} from 'http-status-codes';
 import { Movement } from '../models/MovementModel';
 import { Due } from '../models/DuesModel';
-var helper = require('../helpers/Time');
+import * as helper from '../helpers/Time';
 const res = require('express/lib/response');
 
 export async function add(req, res){

@@ -13,6 +13,7 @@ var user_routes = require('../routes/UserRoute');
 var movement_routes = require('../routes/MovementRoute');
 var type_routes = require('../routes/TypeRoute');
 var due_routes = require('../routes/DueRoute');
+var total_routes = require('../routes/TotalRoute');
 //app.use(bodyParser.urlencoded({extended:false}));
 //app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -22,6 +23,7 @@ app.use('/api/User', user_routes);
 app.use('/api/Movement', movement_routes);
 app.use('/api/Type', type_routes);
 app.use('/api/Due', due_routes);
+app.use('/api/Totals', total_routes);
 // iniciamos nuestro servidor
 app.listen(port);
 console.log('API escuchando en el puerto ' + port);

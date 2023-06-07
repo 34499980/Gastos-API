@@ -1,4 +1,5 @@
 export interface Total {
+    key: string;
     year: number;
     month: number;
     input: number;

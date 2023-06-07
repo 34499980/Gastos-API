@@ -3,7 +3,7 @@ import * as service from  '../services/DueService';
 import * as movementService from  '../services/MovementService';
 import {StatusCodes} from 'http-status-codes';
 import { Movement } from '../models/MovementModel';
-var helper = require('../helpers/Time');
+import * as helper from '../helpers/Time';
 const res = require('express/lib/response');
 
 export async function processByMonth(req, res){

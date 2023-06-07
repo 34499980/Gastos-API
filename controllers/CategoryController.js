@@ -36,7 +36,7 @@ exports.getByIdPrivate = exports.getById = exports.getByName = exports.getByName
 const service = __importStar(require("../services/CategoryService"));
 const http_status_codes_1 = require("http-status-codes");
 //var service = require('../services/CategoryService');
-var helper = require('../helpers/Time');
+const helper = __importStar(require("../helpers/Time"));
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

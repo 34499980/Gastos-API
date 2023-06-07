@@ -2,7 +2,7 @@ import { Category } from '../models/CategoryModel';
 import * as service from  '../services/CategoryService';
 import {StatusCodes} from 'http-status-codes';
 //var service = require('../services/CategoryService');
-var helper = require('../helpers/Time');
+import * as helper from '../helpers/Time';
 const res = require('express/lib/response');
 
 export async function add(req, res,){

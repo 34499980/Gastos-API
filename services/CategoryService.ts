@@ -87,9 +87,7 @@ export async function getById(req): Promise<Category>{
 export async function getByName(req): Promise<Category>{
     let entity: Category;
     return await db.collection(table).where("name", "==", req.body.name).get().then(snap => {
-        snap.forEach(doc => {
-            console.log(doc.data());
-           
+        snap.forEach(doc => {          
             entity = doc.data()
         });
         return entity;

@@ -36,7 +36,7 @@ exports.getById = exports.getByMonth = exports.getAllYears = exports.remove = ex
 const service = __importStar(require("../services/MovementService"));
 const duesService = __importStar(require("../services/DueService"));
 const http_status_codes_1 = require("http-status-codes");
-var helper = require('../helpers/Time');
+const helper = __importStar(require("../helpers/Time"));
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

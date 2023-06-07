@@ -1,7 +1,7 @@
-import { Category } from "../models/CategoryModel";
-import { User } from "../models/UserModel";
 
-const table = 'User';
+import { Total } from "../models/TotalModal";
+
+const table = 'Total';
  //const admin = require('firebase-admin')
  const admin = require('firebase-admin');
  const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
@@ -34,11 +34,11 @@ export async function add(req): Promise<string>{
   
   .add({
     key: '',
-    name: req.name,
-    mail: req.mail,
-    password: req.password,
-    createdDate: req.createdDate,
-    modifiedDate: ''
+    year: req.year,
+    month: req.month,
+    input: req.input,
+    buy: req.buy,    
+    balance: req.balance
 }).then(response => {
   
     return response.id;
@@ -56,20 +56,20 @@ export async function edit(req): Promise<void>{
     var ref = db.collection(table);   
     var upref = ref.doc(req.key);
             upref.update( {
-                                    key: req.key,
-                                    name: req.name,
-                                    mail: req.mail,
-                                    password: req.password,
-                                    createdDate: req.createdDate,
-                                    modifiedDate: req.modifiedDate
+                            key: req.key,
+                            year: req.year,
+                            month: req.month,
+                            input: req.input,
+                            buy: req.buy,    
+                            balance: req.balance
                          })
      
     }
 export async function remove(req){
      await db.collection(table).doc(req.body.key).delete();
     }
-export async function getAll(): Promise<User[]>{
-    let list: User[] = [];
+export async function getAll(): Promise<Total[]>{
+    let list: Total[] = [];
      return  await db.collection(table).get().then(snap => {
         snap.forEach(doc => {         
            
@@ -78,30 +78,17 @@ export async function getAll(): Promise<User[]>{
         return list;
     });  
 }
-export async function getById(req): Promise<User>{
+export async function getById(req): Promise<Total>{
     
      return await db.collection(table).doc(req.body.key).get().then(snap => {
         return snap.data()
     });     
  }   
   
-export async function getByName(req): Promise<User>{
-    let entity: User;
-    return await db.collection(table).where("name", "==", req.body.name)
-                                   //  .where("mail", "array-contains", req.body.name)
-                                     .get().then(snap => {
-        snap.forEach(doc => {          
-            entity = doc.data()
-        });
-        return entity;
-    });     
-}
- 
 module.exports = {
     add,
     edit,
     remove,
     getAll,
-    getByName,
     getById
 };
