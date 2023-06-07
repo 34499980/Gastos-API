@@ -14,7 +14,7 @@ import * as Controller from '../controllers/MovementController';
 router.post('/add', Controller.add);
 router.put('/edit', Controller.edit);
 router.delete('/remove', Controller.remove);
-router.get('/getAllYearsl', Controller.getAllYears);
+router.get('/getAllYears', Controller.getAllYears);
 router.get('/getByMonth', Controller.getByMonth);
 router.get('/getById', Controller.getById);
 app.use(router);

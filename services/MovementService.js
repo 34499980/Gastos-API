@@ -83,15 +83,16 @@ function getById(req) {
 exports.getById = getById;
 function getByMonth(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        let list;
-        return yield db.collection(table).where("month", ">=", req.body.month)
-            .where("month", "<=", req.body.month)
-            .where("year", "==", req.body.year)
+        let list = [];
+        const month = Number(req.body.month);
+        const year = Number(req.body.year);
+        return yield db.collection(table).where("month", "==", month)
+            .where("year", "==", year)
             .get().then(snap => {
             snap.forEach(doc => {
-                console.log(doc.data());
                 list.push(doc.data());
             });
+            console.log(list);
             return list;
         });
     });

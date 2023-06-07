@@ -107,11 +107,11 @@ export async function getAllYears(req, res){
 
 }
 export async function getByMonth(req, res){
-    const list = await service.getByMonth(req)
-    let index: number;
-    for(index = 0; index < list.length; index++){
-        if(list[index].dueBool){
-           list[index].due = await duesService.getByMovementId(list[index].key);
+    const list = await service.getByMonth(req) 
+    
+    for(const element of list){
+        if(element.dueBool){
+            element.due = await duesService.getByMovementId(element.key);
         }       
     }
     

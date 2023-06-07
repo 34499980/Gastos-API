@@ -146,10 +146,9 @@ exports.getAllYears = getAllYears;
 function getByMonth(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const list = yield service.getByMonth(req);
-        let index;
-        for (index = 0; index < list.length; index++) {
-            if (list[index].dueBool) {
-                list[index].due = yield duesService.getByMovementId(list[index].key);
+        for (const element of list) {
+            if (element.dueBool) {
+                element.due = yield duesService.getByMovementId(element.key);
             }
         }
         res.status(http_status_codes_1.StatusCodes.ACCEPTED).json(list);

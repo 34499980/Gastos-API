@@ -78,16 +78,17 @@ export async function getById(req): Promise<Movement>{
  }   
   
 export async function getByMonth(req): Promise<Movement[]>{
-    let list: Movement[];
-    return await db.collection(table).where("month", ">=", req.body.month)
-                                     .where("month", "<=", req.body.month)
-                                     .where("year", "==", req.body.year)
+    let list: Movement[] = [];
+    const month = Number(req.body.month);
+    const year = Number(req.body.year);
+    return await db.collection(table).where("month", "==", month)                                     
+                                     .where("year", "==", year)
                                      .get().then(snap => {
-        snap.forEach(doc => {
-            console.log(doc.data());
+        snap.forEach(doc => {            
            
             list.push(doc.data())
         });
+        console.log(list)
         return list;
     });     
 }
