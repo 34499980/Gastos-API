@@ -35,7 +35,7 @@ export async function add(req, res,){
   
 export async function edit(req, res){
     const dbEntity = await getByNamePrivate(req, res)   
-    console.log(dbEntity)
+   
     if(dbEntity == undefined || dbEntity.key == req.body.key) { 
        const entity: Category = {
         key: req.body.key,

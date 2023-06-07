@@ -40,7 +40,6 @@ var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('add');
         let dueEntity;
         const newEntity = {
             key: req.body.key,
@@ -65,6 +64,7 @@ function add(req, res) {
                 movementKey: '',
                 totalAmount: req.body.due.totalAmount
             };
+            newEntity.amount = dueEntity.amount;
             dueEntity.key = yield duesService.add(dueEntity);
             newEntity.dueKey = dueEntity.key;
         }
@@ -84,7 +84,6 @@ function edit(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const dbEntity = yield getById(req, res);
-        console.log(dbEntity);
         if (dbEntity != undefined) {
             const newEntity = {
                 key: req.body.key,
@@ -110,6 +109,7 @@ function edit(req, res) {
                     movementKey: due.movementKey,
                     totalAmount: req.body.due.totalAmount
                 };
+                newEntity.amount = due.amount;
                 yield duesService.edit(due);
             }
             service.edit(newEntity);
@@ -158,7 +158,8 @@ function getByMonth(req, res) {
 exports.getByMonth = getByMonth;
 function getById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const entity = yield service.getById(req);
+        const id = { key: req.body.key };
+        const entity = yield service.getById(id);
         res.status(http_status_codes_1.StatusCodes.ACCEPTED).json(entity);
     });
 }

@@ -18,7 +18,7 @@ function add(req) {
         return db.collection(table)
             .add({
             key: '',
-            amount: req.countDues,
+            amount: req.amount,
             actualCount: req.actualCount,
             countDues: req.countDues,
             movementKey: req.movementKey,
@@ -35,7 +35,7 @@ function edit(req) {
         var upref = ref.doc(req.key);
         upref.update({
             key: req.key,
-            amount: req.countDues,
+            amount: req.amount,
             actualCount: req.actualCount,
             countDues: req.countDues,
             movementKey: req.movementKey,
@@ -55,23 +55,18 @@ function getAll() {
         let list = [];
         return yield db.collection(table).get().then(snap => {
             snap.forEach(doc => {
-                console.log(doc.data());
                 list.push(doc.data());
             });
             return list;
         });
-        // console.log(snapshot)
-        //snapshot.docs.map(doc => console.log(doc.data()));
     });
 }
 exports.getAll = getAll;
 function getByMovementId(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        // return   await db.ref(table).on('name', req.body.name)
         return yield db.collection(table).doc(req.body.key).get().then(snap => {
             return snap.data();
         });
-        // console.log(snapshot)
     });
 }
 exports.getByMovementId = getByMovementId;

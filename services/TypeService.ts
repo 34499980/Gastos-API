@@ -46,8 +46,7 @@ export async function remove(req){
 export async function getAll(): Promise<Item[]>{
     let list: Item[] = [];
      return  await db.collection(table).get().then(snap => {
-        snap.forEach(doc => {
-            console.log(doc.data());
+        snap.forEach(doc => {          
            
             list.push(doc.data())
         });

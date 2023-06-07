@@ -74,29 +74,23 @@ function getAll() {
         let list = [];
         return yield db.collection(table).get().then(snap => {
             snap.forEach(doc => {
-                console.log(doc.data());
                 list.push(doc.data());
             });
             return list;
         });
-        // console.log(snapshot)
-        //snapshot.docs.map(doc => console.log(doc.data()));
     });
 }
 exports.getAll = getAll;
 function getById(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        // return   await db.ref(table).on('name', req.body.name)
         return yield db.collection(table).doc(req.body.key).get().then(snap => {
             return snap.data();
         });
-        // console.log(snapshot)
     });
 }
 exports.getById = getById;
 function getByName(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        // return   await db.ref(table).on('name', req.body.name)
         let entity;
         return yield db.collection(table).where("name", "==", req.body.name)
             //  .where("mail", "array-contains", req.body.name)
@@ -107,11 +101,9 @@ function getByName(req) {
             });
             return entity;
         });
-        // console.log(snapshot)
     });
 }
 exports.getByName = getByName;
-// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,

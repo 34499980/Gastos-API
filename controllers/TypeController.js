@@ -63,7 +63,6 @@ exports.add = add;
 function edit(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const dbEntity = yield service.getById(req);
-        console.log(dbEntity);
         if (dbEntity == undefined || dbEntity.key == req.body.key) {
             const entity = {
                 key: req.body.key,

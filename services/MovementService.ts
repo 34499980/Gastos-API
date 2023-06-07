@@ -62,28 +62,22 @@ export async function remove(req){
 export async function getAllYears(req): Promise<Movement[]>{
     let list: Movement[] = [];
      return  await db.collection(table).get().then(snap => {
-        snap.forEach(doc => {
-            console.log(doc.data());
+        snap.forEach(doc => {           
            
             list.push(doc.data())
         });
         return list;
     });  
-   // console.log(snapshot)
-    //snapshot.docs.map(doc => console.log(doc.data()));
     
 }
-export async function getById(req): Promise<Movement>{
-    // return   await db.ref(table).on('name', req.body.name)
-    
-     return await db.collection(table).doc(req.body.key).get().then(snap => {
+export async function getById(req): Promise<Movement>{   
+    console.log(req.key)
+     return await db.collection(table).doc(req.key).get().then(snap => {
         return snap.data()
     });     
-    // console.log(snapshot)
  }   
   
 export async function getByMonth(req): Promise<Movement[]>{
-   // return   await db.ref(table).on('name', req.body.name)
     let list: Movement[];
     return await db.collection(table).where("month", ">=", req.body.month)
                                      .where("month", "<=", req.body.month)
@@ -96,10 +90,8 @@ export async function getByMonth(req): Promise<Movement[]>{
         });
         return list;
     });     
-   // console.log(snapshot)
 }
  
-// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,

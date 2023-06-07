@@ -11,7 +11,7 @@ import * as Controller from '../controllers/DueController';
 
  
 // Creamos una ruta de tipo GET para el método de pruebas
-router.post('/processByMonth', Controller.processByMonth);
+router.get('/processByMonth', Controller.processByMonth);
 router.get('/getAll', Controller.getAll);
 app.use(router);
 // Exportamos la configuración

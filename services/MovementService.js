@@ -65,29 +65,24 @@ function getAllYears(req) {
         let list = [];
         return yield db.collection(table).get().then(snap => {
             snap.forEach(doc => {
-                console.log(doc.data());
                 list.push(doc.data());
             });
             return list;
         });
-        // console.log(snapshot)
-        //snapshot.docs.map(doc => console.log(doc.data()));
     });
 }
 exports.getAllYears = getAllYears;
 function getById(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        // return   await db.ref(table).on('name', req.body.name)
-        return yield db.collection(table).doc(req.body.key).get().then(snap => {
+        console.log(req.key);
+        return yield db.collection(table).doc(req.key).get().then(snap => {
             return snap.data();
         });
-        // console.log(snapshot)
     });
 }
 exports.getById = getById;
 function getByMonth(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        // return   await db.ref(table).on('name', req.body.name)
         let list;
         return yield db.collection(table).where("month", ">=", req.body.month)
             .where("month", "<=", req.body.month)
@@ -99,11 +94,9 @@ function getByMonth(req) {
             });
             return list;
         });
-        // console.log(snapshot)
     });
 }
 exports.getByMonth = getByMonth;
-// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,

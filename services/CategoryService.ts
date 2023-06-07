@@ -52,7 +52,7 @@ export async function add(req): Promise<string>{
 export async function edit(req): Promise<void>{
  
     var ref = db.collection(table);
-    console.log(req.key)
+   
     var upref = ref.doc(req.key);
             upref.update( {
                                     key: req.key,
@@ -69,28 +69,22 @@ export async function remove(req){
 export async function getAll(): Promise<Category[]>{
     let list: Category[] = [];
      return  await db.collection(table).get().then(snap => {
-        snap.forEach(doc => {
-            console.log(doc.data());
+        snap.forEach(doc => {           
            
             list.push(doc.data())
         });
         return list;
     });  
-   // console.log(snapshot)
-    //snapshot.docs.map(doc => console.log(doc.data()));
     
 }
 export async function getById(req): Promise<Category>{
-    // return   await db.ref(table).on('name', req.body.name)
     
      return await db.collection(table).doc(req.body.key).get().then(snap => {
         return snap.data()
     });     
-    // console.log(snapshot)
  }   
   
 export async function getByName(req): Promise<Category>{
-   // return   await db.ref(table).on('name', req.body.name)
     let entity: Category;
     return await db.collection(table).where("name", "==", req.body.name).get().then(snap => {
         snap.forEach(doc => {
@@ -100,10 +94,8 @@ export async function getByName(req): Promise<Category>{
         });
         return entity;
     });     
-   // console.log(snapshot)
 }
  
-// Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     add,
     edit,

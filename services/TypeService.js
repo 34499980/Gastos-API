@@ -47,7 +47,6 @@ function getAll() {
         let list = [];
         return yield db.collection(table).get().then(snap => {
             snap.forEach(doc => {
-                console.log(doc.data());
                 list.push(doc.data());
             });
             return list;

@@ -38,12 +38,13 @@ const movementService = __importStar(require("../services/MovementService"));
 const http_status_codes_1 = require("http-status-codes");
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
-function processByMonth() {
+function processByMonth(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const list = yield service.getAll();
         for (const element of list) {
             element.actualCount++;
-            const movement = yield movementService.getById(element.movementKey);
+            const id = { key: element.movementKey };
+            const movement = yield movementService.getById(id);
             const newMovement = {
                 key: '',
                 description: movement.description,
@@ -60,6 +61,7 @@ function processByMonth() {
             };
             newMovement.key = yield movementService.add(newMovement);
             yield movementService.edit(newMovement);
+            console.log(element);
             yield service.edit(element);
         }
         res.send(http_status_codes_1.StatusCodes.GONE);

@@ -15,7 +15,7 @@ export async function add(req): Promise<string>{
   
   .add({
         key: '',
-        amount: req.countDues,
+        amount: req.amount,
         actualCount: req.actualCount,
         countDues: req.countDues,
         movementKey: req.movementKey,
@@ -38,7 +38,7 @@ export async function edit(req): Promise<void>{
     var upref = ref.doc(req.key);
             upref.update( {
                         key: req.key,
-                        amount: req.countDues,
+                        amount: req.amount,
                         actualCount: req.actualCount,
                         countDues: req.countDues,
                         movementKey: req.movementKey,
@@ -52,24 +52,20 @@ export async function remove(req){
 export async function getAll(): Promise<Due[]>{
     let list: Due[] = [];
      return  await db.collection(table).get().then(snap => {
-        snap.forEach(doc => {
-            console.log(doc.data());
+        snap.forEach(doc => {          
            
             list.push(doc.data())
         });
         return list;
     });  
-   // console.log(snapshot)
-    //snapshot.docs.map(doc => console.log(doc.data()));
     
 }
 export async function getByMovementId(req): Promise<Due>{
-    // return   await db.ref(table).on('name', req.body.name)
-    
+  
      return await db.collection(table).doc(req.body.key).get().then(snap => {
         return snap.data()
     });     
-    // console.log(snapshot)
+   
  }   
 
 module.exports = {

@@ -34,7 +34,7 @@ const router = express_1.default.Router();
 const Controller = __importStar(require("../controllers/DueController"));
 // Llamamos al router
 // Creamos una ruta de tipo GET para el método de pruebas
-router.post('/processByMonth', Controller.processByMonth);
+router.get('/processByMonth', Controller.processByMonth);
 router.get('/getAll', Controller.getAll);
 app.use(router);
 // Exportamos la configuración

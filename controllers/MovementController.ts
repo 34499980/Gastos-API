@@ -8,7 +8,7 @@ var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 
 export async function add(req, res){
-    console.log('add')
+   
     let dueEntity: Due;
     const newEntity: Movement = {
         key: req.body.key,
@@ -34,6 +34,7 @@ export async function add(req, res){
             totalAmount: req.body.due.totalAmount
             
         }
+        newEntity.amount = dueEntity.amount; 
         dueEntity.key = await duesService.add(dueEntity);
         newEntity.dueKey = dueEntity.key
     }
@@ -50,7 +51,7 @@ export async function add(req, res){
 }    
 export async function edit(req, res){
     const dbEntity = await getById(req, res)   
-    console.log(dbEntity)
+   
     if(dbEntity != undefined){
         const newEntity: Movement = {
             key: req.body.key,
@@ -75,7 +76,8 @@ export async function edit(req, res){
                 countDues: req.body.due.countDues?? due.countDues,
                 movementKey: due.movementKey,
                 totalAmount: req.body.due.totalAmount
-            }            
+            }    
+            newEntity.amount = due.amount;       
             await duesService.edit(due);
 
         }
@@ -117,7 +119,8 @@ export async function getByMonth(req, res){
    
 }
 export async function getById(req, res){
-   const entity = await service.getById(req);
+   const id = {key: req.body.key} 
+   const entity = await service.getById(id);
    res.status(StatusCodes.ACCEPTED).json(entity);
 }
  

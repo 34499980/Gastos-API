@@ -6,11 +6,12 @@ import { Movement } from '../models/MovementModel';
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 
-export async function processByMonth(){
+export async function processByMonth(req, res){
    const list = await service.getAll();
    for(const element of list){
     element.actualCount++;
-    const movement = await movementService.getById(element.movementKey)
+    const id = {key: element.movementKey};
+    const movement = await movementService.getById(id);
     const newMovement: Movement = {
         key: '',
         description: movement.description,
@@ -27,6 +28,7 @@ export async function processByMonth(){
     }
     newMovement.key = await movementService.add(newMovement);
     await movementService.edit(newMovement);
+    console.log(element)
     await service.edit(element);
    }
    res.send(StatusCodes.GONE)

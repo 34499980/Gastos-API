@@ -31,7 +31,7 @@ export async function add(req, res,){
   
 export async function edit(req, res){
     const dbEntity = await service.getById(req)   
-    console.log(dbEntity)
+   
     if(dbEntity == undefined || dbEntity.key == req.body.key) { 
        const entity: Item = {
         key: req.body.key,       
