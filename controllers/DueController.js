@@ -41,7 +41,14 @@ const res = require('express/lib/response');
 function processByMonth(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const list = yield service.getAll();
-        for (const element of list) {
+        const listToUpdate = list.filter(x => x.actualCount != x.countDues);
+        const listToRemove = list.filter(x => x.actualCount == x.countDues);
+        console.log('Update:' + listToUpdate);
+        console.log('remove:' + listToRemove);
+        for (const element of listToRemove) {
+            yield service.remove(element);
+        }
+        for (const element of listToUpdate) {
             element.actualCount++;
             const id = { key: element.movementKey };
             const movement = yield movementService.getById(id);

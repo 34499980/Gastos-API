@@ -8,7 +8,14 @@ const res = require('express/lib/response');
 
 export async function processByMonth(req, res){
    const list = await service.getAll();
-   for(const element of list){
+   const listToUpdate = list.filter(x => x.actualCount != x.countDues);
+   const listToRemove = list.filter(x => x.actualCount == x.countDues);
+   console.log('Update:' + listToUpdate )
+   console.log('remove:' + listToRemove )
+   for(const element of listToRemove){
+       await service.remove(element)
+   }
+   for(const element of listToUpdate){
     element.actualCount++;
     const id = {key: element.movementKey};
     const movement = await movementService.getById(id);
