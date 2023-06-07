@@ -40,6 +40,7 @@ var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 function add(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('add');
         let dueEntity;
         const newEntity = {
             key: req.body.key,
@@ -50,12 +51,12 @@ function add(req, res) {
             year: req.body.year,
             month: req.body.month,
             dueKey: req.body.dueKey,
-            createdDate: req.body.createdDate,
-            modifiedDate: helper.getNowWithHours(),
+            createdDate: helper.getNowWithHours(),
+            modifiedDate: '',
             createdBy: req.body.createdBy,
             dueBool: req.body.dueBool
         };
-        if (newEntity.dueBool != undefined) {
+        if (newEntity.dueBool == true) {
             dueEntity = {
                 key: '',
                 amount: req.body.due.totalAmount / req.body.due.countDues,
@@ -67,8 +68,12 @@ function add(req, res) {
             dueEntity.key = yield duesService.add(dueEntity);
             newEntity.dueKey = dueEntity.key;
         }
-        dueEntity.key = yield service.add(newEntity);
-        yield service.edit(dueEntity);
+        newEntity.key = yield service.add(newEntity);
+        yield service.edit(newEntity);
+        if (newEntity.dueBool == true) {
+            dueEntity.movementKey = newEntity.key;
+            yield duesService.edit(dueEntity);
+        }
         res.status(http_status_codes_1.StatusCodes.CREATED).send({
             menssage: 'Se genero el movimiento'
         });
@@ -95,7 +100,7 @@ function edit(req, res) {
                 createdBy: req.body.createdBy,
                 dueBool: req.body.dueBool
             };
-            if (newEntity.dueBool != undefined) {
+            if (newEntity.dueBool == true) {
                 let due = yield duesService.getByMovementId(newEntity.key);
                 due = {
                     key: due.key,

@@ -7,7 +7,8 @@ import { Due } from '../models/DuesModel';
 var helper = require('../helpers/Time');
 const res = require('express/lib/response');
 
-export async function add(req, res,){
+export async function add(req, res){
+    console.log('add')
     let dueEntity: Due;
     const newEntity: Movement = {
         key: req.body.key,
@@ -18,12 +19,12 @@ export async function add(req, res,){
         year: req.body.year,
         month: req.body.month,
         dueKey: req.body.dueKey,
-        createdDate: req.body.createdDate,
-        modifiedDate: helper.getNowWithHours(),
+        createdDate: helper.getNowWithHours(),
+        modifiedDate: '',
         createdBy: req.body.createdBy,
         dueBool: req.body.dueBool 
     }
-    if(newEntity.dueBool != undefined) {
+    if(newEntity.dueBool == true) {
          dueEntity = {
             key: '',
             amount: req.body.due.totalAmount / req.body.due.countDues,
@@ -36,8 +37,12 @@ export async function add(req, res,){
         dueEntity.key = await duesService.add(dueEntity);
         newEntity.dueKey = dueEntity.key
     }
-    dueEntity.key = await service.add(newEntity)
-    await service.edit(dueEntity);
+    newEntity.key = await service.add(newEntity)
+    await service.edit(newEntity);
+    if(newEntity.dueBool == true) {
+        dueEntity.movementKey = newEntity.key;
+        await duesService.edit(dueEntity);
+    }
     
     res.status(StatusCodes.CREATED). send({
         menssage: 'Se genero el movimiento'
@@ -61,7 +66,7 @@ export async function edit(req, res){
             createdBy: req.body.createdBy,
             dueBool: req.body.dueBool 
         }
-        if(newEntity.dueBool != undefined) {
+        if(newEntity.dueBool == true) {
             let due = await duesService.getByMovementId(newEntity.key)
             due = {
                 key: due.key,
