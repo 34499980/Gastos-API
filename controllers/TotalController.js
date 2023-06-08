@@ -39,8 +39,8 @@ const helper = __importStar(require("../helpers/Time"));
 const res = require('express/lib/response');
 function processTotals(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const date = new Date();
-        helper.subtractMonths(3);
+        const date = helper.subtractMonths(3);
+        // const movementEntities = await movementService.getByMonth(date)
         res.send(http_status_codes_1.StatusCodes.ACCEPTED);
     });
 }

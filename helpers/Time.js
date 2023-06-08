@@ -13,14 +13,17 @@ function getNowDate() {
 exports.getNowDate = getNowDate;
 function subtractMonths(month) {
     const date = new Date();
-    let index = date.getMonth();
+    let index = 2; //date.getMonth();
+    let year = date.getFullYear();
     for (index; month > 0; month--) {
         if (index == 0) {
             index = 12;
+            year--;
         }
         index--;
     }
-    console.log(index);
+    console.log({ month: index, year: year });
+    return { month: index, year: year };
 }
 exports.subtractMonths = subtractMonths;
 module.exports = {

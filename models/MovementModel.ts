@@ -5,7 +5,7 @@ export interface Movement extends Auditory{
     key: string;
     description: string;
     amount: number;
-    typeKey: string;
+    typeKey: number;
     categoryKey: string;
     month: number;
     year: number;

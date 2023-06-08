@@ -10,13 +10,15 @@ export function getNowDate(){
 export function subtractMonths(month: number){
     const date = new Date();
     let index = date.getMonth();
+    let year = date.getFullYear();
     for(index; month > 0; month--){
         if(index == 0) {
             index = 12
+            year--;
         }
         index--;      
-    }
-    console.log(index);
+    }    
+    return {month: index, year: year}
 
 }
 module.exports = {
