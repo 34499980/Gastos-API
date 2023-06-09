@@ -79,8 +79,8 @@ export async function getById(req): Promise<Movement>{
   
 export async function getByMonth(req): Promise<Movement[]>{
     let list: Movement[] = [];
-    const month = Number(req.body.month);
-    const year = Number(req.body.year);
+    const month = Number(req.month);
+    const year = Number(req.year);
     return await db.collection(table).where("month", "==", month)                                     
                                      .where("year", "==", year)
                                      .get().then(snap => {

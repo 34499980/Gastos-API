@@ -56,11 +56,11 @@ function edit(req) {
 exports.edit = edit;
 function remove(req) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield db.collection(table).doc(req.body.key).delete();
+        yield db.collection(table).doc(req.key).delete();
     });
 }
 exports.remove = remove;
-function getAllYears(req) {
+function getAllYears() {
     return __awaiter(this, void 0, void 0, function* () {
         let list = [];
         return yield db.collection(table).get().then(snap => {
@@ -83,8 +83,8 @@ exports.getById = getById;
 function getByMonth(req) {
     return __awaiter(this, void 0, void 0, function* () {
         let list = [];
-        const month = Number(req.body.month);
-        const year = Number(req.body.year);
+        const month = Number(req.month);
+        const year = Number(req.year);
         return yield db.collection(table).where("month", "==", month)
             .where("year", "==", year)
             .get().then(snap => {

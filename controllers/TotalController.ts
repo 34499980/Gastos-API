@@ -11,8 +11,9 @@ const res = require('express/lib/response');
 
 export async function processTotals(req, res){
     
-    const date = helper.subtractMonths(3);
+    const date = helper.subtractMonths(6);
     const movementEntities = await movementService.getByMonth(date);
+    console.log(movementEntities)
     const dueEntities = (await dueService.getAll()).map(x => x.key);
    
     const input = movementEntities.filter(x => x.typeKey == Type.input?? 0)

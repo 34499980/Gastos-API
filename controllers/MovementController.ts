@@ -102,12 +102,13 @@ export async function edit(req, res){
    
 }
 export async function getAllYears(req, res){       
-   const list = await service.getAllYears(req)
+   const list = await service.getAllYears()
    res.status(StatusCodes.ACCEPTED).json(list);
 
 }
 export async function getByMonth(req, res){
-    const list = await service.getByMonth(req) 
+    const date = {month: req.body.month, year: req.body.month};
+    const list = await service.getByMonth(date) 
     
     for(const element of list){
         if(element.dueBool){

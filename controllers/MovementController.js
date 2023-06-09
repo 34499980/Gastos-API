@@ -138,14 +138,15 @@ function remove(req, res) {
 exports.remove = remove;
 function getAllYears(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const list = yield service.getAllYears(req);
+        const list = yield service.getAllYears();
         res.status(http_status_codes_1.StatusCodes.ACCEPTED).json(list);
     });
 }
 exports.getAllYears = getAllYears;
 function getByMonth(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const list = yield service.getByMonth(req);
+        const date = { month: req.body.month, year: req.body.month };
+        const list = yield service.getByMonth(date);
         for (const element of list) {
             if (element.dueBool) {
                 element.due = yield duesService.getByMovementId(element.key);
