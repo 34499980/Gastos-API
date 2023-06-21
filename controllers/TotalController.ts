@@ -9,36 +9,44 @@ import { Total } from '../models/TotalModal';
 
 const res = require('express/lib/response');
 
-export async function processTotals(req, res){
-    
-    const date = helper.subtractMonths(6);
-    const movementEntities = await movementService.getByMonth(date);
-    console.log(movementEntities)
-    const dueEntities = (await dueService.getAll()).map(x => x.key);
-   
-    const input = movementEntities.filter(x => x.typeKey == Type.input?? 0)
-                                   .map(q => q.amount)
-                                   .reduce((result, value) => result + value, 0);
-    const buy = movementEntities.filter(x => x.typeKey == Type.buy?? 0)
-                                   .map(q => q.amount)
-                                   .reduce((result, value) => result + value, 0);
-    const total: Total = {
-        input: input,
-        buy: buy,
-        balance: input - buy,
-        year: date.year,
-        month: date.month,
-        key: ''        
+export async function processTotals(req, res){   
+    let monthReduce = 1;
+    for(let im = 0; im < 3; im++){
+        const date = helper.subtractMonths(monthReduce);
+        monthReduce++;
+        console.log(date)
+        const movementEntities = await movementService.getByMonth(date);
+       
+        const dueEntities = (await dueService.getAll()).map(x => x.key);
+       
+        const inputArray = movementEntities.filter(x => x.typeKey == Type.input)
+                                   //    .map(q => q.amount);
+                                       
+        const buyArray = movementEntities.filter(x => x.typeKey == Type.buy)
+                                      // .map(q => q.amount);
+                                 
+        const input = inputArray.reduce((result, value) => result + value.amount, 0);
+        const buy = buyArray.reduce((result, value) => result + value.amount, 0);
+        const total: Total = {
+            input: input,
+            buy: buy,
+            balance: input - buy,
+            year: date.year,
+            month: date.month,
+            key: ''        
+        }
+        total.key = await service.add(total);
+        await service.edit(total);   
+        
+        let movementToRemoveAll = (await movementService.getAllYears()).filter(({key}) => !dueEntities.includes(key)).filter(x => x.month < date.month);
+        const movementToRemove =  movementEntities.filter(({key}) => !dueEntities.includes(key));
+        movementToRemoveAll = [...movementToRemoveAll, ...movementToRemove]
+        console.log(movementToRemoveAll)
+        for(const item of movementToRemoveAll){
+           // await movementService.remove(item);
+        }
     }
-    total.key = await service.add(total);
-    await service.edit(total);   
     
-    let movementToRemoveAll = (await movementService.getAllYears()).filter(({key}) => !dueEntities.includes(key)).filter(x => x.month < date.month);
-    const movementToRemove =  movementEntities.filter(({key}) => !dueEntities.includes(key));
-    movementToRemoveAll = [...movementToRemoveAll, ...movementToRemove]
-    for(const item of movementToRemoveAll){
-        await movementService.remove(item);
-    }
     
    res.send(StatusCodes.ACCEPTED)
 }  

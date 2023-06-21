@@ -88,7 +88,7 @@ export async function getByMonth(req): Promise<Movement[]>{
            
             list.push(doc.data())
         });
-        console.log(list)
+       
         return list;
     });     
 }

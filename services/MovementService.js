@@ -91,7 +91,6 @@ function getByMonth(req) {
             snap.forEach(doc => {
                 list.push(doc.data());
             });
-            console.log(list);
             return list;
         });
     });
