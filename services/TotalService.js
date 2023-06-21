@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getById = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
+exports.getByMonth = exports.getMonth = exports.getById = exports.getAll = exports.remove = exports.edit = exports.add = void 0;
 const table = 'Total';
 //const admin = require('firebase-admin')
 const admin = require('firebase-admin');
@@ -89,10 +89,35 @@ function getById(req) {
     });
 }
 exports.getById = getById;
+function getMonth(req) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield db.collection(table).doc(req.body.key).get().then(snap => {
+            return snap.data();
+        });
+    });
+}
+exports.getMonth = getMonth;
+function getByMonth(req) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let entity;
+        const month = Number(req.month);
+        const year = Number(req.year);
+        return yield db.collection(table).where("month", "==", month)
+            .where("year", "==", year)
+            .get().then(snap => {
+            snap.forEach(doc => {
+                entity = doc.data();
+            });
+            return entity;
+        });
+    });
+}
+exports.getByMonth = getByMonth;
 module.exports = {
     add,
     edit,
     remove,
     getAll,
-    getById
+    getById,
+    getByMonth
 };

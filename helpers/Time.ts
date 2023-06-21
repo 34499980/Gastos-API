@@ -9,7 +9,7 @@ export function getNowDate(){
 }
 export function subtractMonths(month: number){
     const date = new Date();
-    let index = date.getMonth();
+    let index = date.getMonth()-1;
     let year = date.getFullYear();
     for(index; month > 0; month--){
         if(index == 0) {

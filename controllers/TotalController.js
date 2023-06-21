@@ -42,13 +42,13 @@ const type_1 = require("../enums/type");
 const res = require('express/lib/response');
 function processTotals(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const dueEntities = (yield dueService.getAll()).map(x => x.key);
         let monthReduce = 1;
         for (let im = 0; im < 3; im++) {
             const date = helper.subtractMonths(monthReduce);
-            monthReduce++;
             console.log(date);
+            monthReduce++;
             const movementEntities = yield movementService.getByMonth(date);
-            const dueEntities = (yield dueService.getAll()).map(x => x.key);
             const inputArray = movementEntities.filter(x => x.typeKey == type_1.Type.input);
             //    .map(q => q.amount);
             const buyArray = movementEntities.filter(x => x.typeKey == type_1.Type.buy);
@@ -63,13 +63,42 @@ function processTotals(req, res) {
                 month: date.month,
                 key: ''
             };
-            total.key = yield service.add(total);
-            yield service.edit(total);
-            let movementToRemoveAll = (yield movementService.getAllYears()).filter(({ key }) => !dueEntities.includes(key)).filter(x => x.month < date.month);
-            const movementToRemove = movementEntities.filter(({ key }) => !dueEntities.includes(key));
-            movementToRemoveAll = [...movementToRemoveAll, ...movementToRemove];
-            console.log(movementToRemoveAll);
-            for (const item of movementToRemoveAll) {
+            let totalEntity = yield service.getByMonth(date);
+            if (totalEntity != null || totalEntity != undefined) {
+                totalEntity.input = total.input;
+                totalEntity.buy = total.buy;
+                totalEntity.balance = totalEntity.input - totalEntity.buy;
+                yield service.edit(totalEntity);
+            }
+            else {
+                total.key = yield service.add(total);
+                yield service.edit(total);
+            }
+            // let movementToRemoveAll = (await movementService.getAllYears()).filter(({key}) => !dueEntities.includes(key)).filter(x => x.month < date.month);
+            //  const movementToRemove =  movementEntities.filter(({key}) => !dueEntities.includes(key));
+            //  movementToRemoveAll = [...movementToRemoveAll, ...movementToRemove]
+            //console.log(movementToRemoveAll)
+        }
+        const date = {
+            month: new Date().getMonth() + 2,
+            year: new Date().getFullYear()
+        };
+        // console.log(date)
+        // console.log('entra')
+        const movementEntities = yield movementService.getMinorMonth(date);
+        // console.log('sale')
+        console.log(movementEntities);
+        for (const item of movementEntities) {
+            console.log(item.dueKey);
+            if (item.dueKey != null) {
+                const due = dueEntities.find(x => x == item.dueKey);
+                console.log(dueEntities);
+                console.log(due);
+                if (due == undefined) {
+                    yield movementService.remove(item);
+                }
+            }
+            else {
                 yield movementService.remove(item);
             }
         }

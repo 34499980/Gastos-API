@@ -92,12 +92,27 @@ export async function getByMonth(req): Promise<Movement[]>{
         return list;
     });     
 }
- 
+export async function getMinorMonth(req): Promise<Movement[]>{
+    let list: Movement[] = [];
+    const month = Number(req.month);
+    const year = Number(req.year);
+    return await db.collection(table).where("month", "<", month)                                     
+                                     .where("year", "<", year)
+                                     .get().then(snap => {
+        snap.forEach(doc => {            
+           
+            list.push(doc.data())
+        });
+       
+        return list;
+    });     
+}
 module.exports = {
     add,
     edit,
     remove,
     getAllYears,
     getByMonth,
-    getById
+    getById,
+    getMinorMonth
 };

@@ -43,8 +43,6 @@ function processByMonth(req, res) {
         const list = yield service.getAll();
         const listToUpdate = list.filter(x => x.actualCount != x.countDues);
         const listToRemove = list.filter(x => x.actualCount == x.countDues);
-        console.log('Update:' + listToUpdate);
-        console.log('remove:' + listToRemove);
         for (const element of listToRemove) {
             yield service.remove(element);
         }
@@ -59,16 +57,16 @@ function processByMonth(req, res) {
                 typeKey: movement.typeKey,
                 categoryKey: movement.categoryKey,
                 year: new Date().getFullYear(),
-                month: new Date().getMonth(),
+                month: new Date().getMonth() + 1,
                 dueKey: movement.dueKey,
                 createdDate: helper.getNowWithHours(),
                 modifiedDate: '',
                 createdBy: 'System',
                 dueBool: true
             };
+            console.log(newMovement);
             newMovement.key = yield movementService.add(newMovement);
             yield movementService.edit(newMovement);
-            console.log(element);
             yield service.edit(element);
         }
         res.send(http_status_codes_1.StatusCodes.GONE);

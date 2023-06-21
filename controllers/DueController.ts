@@ -10,8 +10,6 @@ export async function processByMonth(req, res){
    const list = await service.getAll();
    const listToUpdate = list.filter(x => x.actualCount != x.countDues);
    const listToRemove = list.filter(x => x.actualCount == x.countDues);
-   console.log('Update:' + listToUpdate )
-   console.log('remove:' + listToRemove )
    for(const element of listToRemove){
        await service.remove(element)
    }
@@ -26,16 +24,17 @@ export async function processByMonth(req, res){
         typeKey: movement.typeKey,
         categoryKey: movement.categoryKey,
         year: new Date().getFullYear(),
-        month: new Date().getMonth(),
+        month: new Date().getMonth()+1,
         dueKey: movement.dueKey,
         createdDate: helper.getNowWithHours(),
         modifiedDate: '',
         createdBy: 'System',
         dueBool: true 
     }
+    console.log(newMovement)
     newMovement.key = await movementService.add(newMovement);
     await movementService.edit(newMovement);
-    console.log(element)
+
     await service.edit(element);
    }
    res.send(StatusCodes.GONE)

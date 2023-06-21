@@ -13,7 +13,7 @@ function getNowDate() {
 exports.getNowDate = getNowDate;
 function subtractMonths(month) {
     const date = new Date();
-    let index = date.getMonth();
+    let index = 8;
     let year = date.getFullYear();
     for (index; month > 0; month--) {
         if (index == 0) {

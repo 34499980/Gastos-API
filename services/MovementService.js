@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByMonth = exports.getById = exports.getAllYears = exports.remove = exports.edit = exports.add = void 0;
+exports.getMinorMonth = exports.getByMonth = exports.getById = exports.getAllYears = exports.remove = exports.edit = exports.add = void 0;
 const table = 'Movement';
 const admin = require('firebase-admin');
 const db = admin.firestore();
@@ -96,11 +96,28 @@ function getByMonth(req) {
     });
 }
 exports.getByMonth = getByMonth;
+function getMinorMonth(req) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let list = [];
+        const month = Number(req.month);
+        const year = Number(req.year);
+        return yield db.collection(table).where("month", "<", month)
+            //.where("year", "<", year)
+            .get().then(snap => {
+            snap.forEach(doc => {
+                list.push(doc.data());
+            });
+            return list;
+        });
+    });
+}
+exports.getMinorMonth = getMinorMonth;
 module.exports = {
     add,
     edit,
     remove,
     getAllYears,
     getByMonth,
-    getById
+    getById,
+    getMinorMonth
 };

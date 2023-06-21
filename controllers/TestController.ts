@@ -29,7 +29,7 @@ export async function AddMovement(req, res){
         {
             "key": "",
             "description": "sueldo",
-            "amount": 3000,
+            "amount": 30000,
             "typeKey": 1,
             "categoryKey": "MYf10RFsecN8p3LibuiL",
             "year": 2023,
@@ -57,7 +57,7 @@ export async function AddMovement(req, res){
         {
             "key": "",
             "description": "sueldo",
-            "amount": 6000,
+            "amount": 60000,
             "typeKey": 1,
             "categoryKey": "MYf10RFsecN8p3LibuiL",
             "year": 2023,
@@ -93,7 +93,7 @@ export async function AddMovement(req, res){
         {
             "key": "",
             "description": "sueldo",
-            "amount": 5000,
+            "amount": 50000,
             "typeKey": 1,
             "categoryKey": "MYf10RFsecN8p3LibuiL",
             "year": 2023,
@@ -107,7 +107,7 @@ export async function AddMovement(req, res){
         {
             "key": "",
             "description": "sueldo",
-            "amount": 6000,
+            "amount": 60000,
             "typeKey": 1,
             "categoryKey": "MYf10RFsecN8p3LibuiL",
             "year": 2023,

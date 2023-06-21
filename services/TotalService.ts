@@ -84,11 +84,32 @@ export async function getById(req): Promise<Total>{
         return snap.data()
     });     
  }   
-  
+ export async function getMonth(req): Promise<Total>{
+    
+    return await db.collection(table).doc(req.body.key).get().then(snap => {
+       return snap.data()
+   });     
+}   
+export async function getByMonth(req): Promise<Total>{
+    let entity: Total;
+    const month = Number(req.month);
+    const year = Number(req.year);
+    return await db.collection(table).where("month", "==", month)                                     
+                                     .where("year", "==", year)
+                                     .get().then(snap => {
+        snap.forEach(doc => {            
+           
+            entity = doc.data()
+        });
+       
+        return entity;
+    });     
+} 
 module.exports = {
     add,
     edit,
     remove,
     getAll,
-    getById
+    getById,
+    getByMonth
 };

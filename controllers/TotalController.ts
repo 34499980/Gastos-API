@@ -9,15 +9,17 @@ import { Total } from '../models/TotalModal';
 
 const res = require('express/lib/response');
 
-export async function processTotals(req, res){   
+export async function processTotals(req, res){  
+    const dueEntities = (await dueService.getAll()).map(x => x.key); 
     let monthReduce = 1;
     for(let im = 0; im < 3; im++){
         const date = helper.subtractMonths(monthReduce);
-        monthReduce++;
         console.log(date)
+        monthReduce++;
+        
         const movementEntities = await movementService.getByMonth(date);
        
-        const dueEntities = (await dueService.getAll()).map(x => x.key);
+       
        
         const inputArray = movementEntities.filter(x => x.typeKey == Type.input)
                                    //    .map(q => q.amount);
@@ -35,16 +37,47 @@ export async function processTotals(req, res){
             month: date.month,
             key: ''        
         }
-        total.key = await service.add(total);
-        await service.edit(total);   
-        
-        let movementToRemoveAll = (await movementService.getAllYears()).filter(({key}) => !dueEntities.includes(key)).filter(x => x.month < date.month);
-        const movementToRemove =  movementEntities.filter(({key}) => !dueEntities.includes(key));
-        movementToRemoveAll = [...movementToRemoveAll, ...movementToRemove]
-        console.log(movementToRemoveAll)
-        for(const item of movementToRemoveAll){
-           // await movementService.remove(item);
+        let totalEntity = await service.getByMonth(date)
+        if(totalEntity != null || totalEntity != undefined) {
+            totalEntity.input = total.input;
+            totalEntity.buy = total.buy;
+            totalEntity.balance = totalEntity.input - totalEntity.buy;
+            await service.edit(totalEntity);   
+        } else {
+            total.key = await service.add(total);
+            await service.edit(total);   
         }
+       
+        
+       // let movementToRemoveAll = (await movementService.getAllYears()).filter(({key}) => !dueEntities.includes(key)).filter(x => x.month < date.month);
+      //  const movementToRemove =  movementEntities.filter(({key}) => !dueEntities.includes(key));
+      //  movementToRemoveAll = [...movementToRemoveAll, ...movementToRemove]
+     
+        //console.log(movementToRemoveAll)
+       
+    }
+    const date = {
+        month: new Date().getMonth()+2,
+        year: new Date().getFullYear()
+    }
+   // console.log(date)
+   // console.log('entra')
+    const movementEntities = await movementService.getMinorMonth(date);
+   // console.log('sale')
+    console.log(movementEntities)
+    for(const item of movementEntities){
+        console.log(item.dueKey)
+        if(item.dueKey != null) {
+            const due = dueEntities.find(x => x == item.dueKey);
+            console.log(dueEntities);
+            console.log(due);
+            if(due == undefined) {
+                await movementService.remove(item);
+            }
+        } else {
+            await movementService.remove(item);
+        }
+        
     }
     
     
