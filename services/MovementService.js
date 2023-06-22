@@ -99,10 +99,11 @@ exports.getByMonth = getByMonth;
 function getMinorMonth(req) {
     return __awaiter(this, void 0, void 0, function* () {
         let list = [];
+        console.log(req);
         const month = Number(req.month);
         const year = Number(req.year);
-        return yield db.collection(table).where("month", "<", month)
-            //.where("year", "<", year)
+        return yield db.collection(table)
+            .where("year", "<=", year)
             .get().then(snap => {
             snap.forEach(doc => {
                 list.push(doc.data());

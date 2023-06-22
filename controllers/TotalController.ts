@@ -10,9 +10,9 @@ import { Total } from '../models/TotalModal';
 const res = require('express/lib/response');
 
 export async function processTotals(req, res){  
-    const dueEntities = (await dueService.getAll()).map(x => x.key); 
+   
     let monthReduce = 1;
-    for(let im = 0; im < 3; im++){
+    
         const date = helper.subtractMonths(monthReduce);
         console.log(date)
         monthReduce++;
@@ -55,18 +55,21 @@ export async function processTotals(req, res){
      
         //console.log(movementToRemoveAll)
        
-    }
-    const date = {
-        month: new Date().getMonth()+2,
-        year: new Date().getFullYear()
-    }
-   // console.log(date)
-   // console.log('entra')
-    const movementEntities = await movementService.getMinorMonth(date);
-   // console.log('sale')
-    console.log(movementEntities)
+    
+    
+    
+    
+   res.send(StatusCodes.ACCEPTED)
+}  
+  
+export async function removeByMonths(req, res){
+    const dueEntities = (await dueService.getAll()).map(x => x.key); 
+    const date = helper.subtractMonths(3);
+   
+    const movementEntities = await movementService.getByMonth(date);   
+    
     for(const item of movementEntities){
-        console.log(item.dueKey)
+       
         if(item.dueKey != null) {
             const due = dueEntities.find(x => x == item.dueKey);
             console.log(dueEntities);
@@ -79,18 +82,31 @@ export async function processTotals(req, res){
         }
         
     }
-    
-    
-   res.send(StatusCodes.ACCEPTED)
-}  
-  
-export async function edit(req, res){
-    
-   
+    res.send(StatusCodes.ACCEPTED)
  }
- export async function remove(req, res){
-   
+ export async function removeOldDues(req, res){
+    const dueEntities = (await dueService.getAll()).map(x => x.key); 
+    const date = helper.subtractMonths(3);
+  
+    const movementEntities = (await movementService.getMinorMonth(date)).filter(x => x.month < date.month);   
+    console.log(movementEntities)
+    for(const item of movementEntities){
+       
+        if(item.dueKey != null) {
+            const due = dueEntities.find(x => x == item.dueKey);
+            console.log(item);
+            console.log(dueEntities);
+            console.log(due);
+            if(due == undefined) {
+                await movementService.remove(item);
+            }
+        } else {
+            await movementService.remove(item);
+        }
+        
     }
+    res.send(StatusCodes.ACCEPTED)
+}
 export async function getAll(req, res){
     let list = await service.getAll()
     res.status(StatusCodes.ACCEPTED).json(list);
@@ -103,8 +119,8 @@ export async function getById(req, res){
 // Exportamos las funciones en un objeto json para poder usarlas en otros fuera de este fichero
 module.exports = {
     processTotals,
-    edit,
-    remove,
+    removeByMonths,
+    removeOldDues,
     getAll,
     getById
 };

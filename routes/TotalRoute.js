@@ -35,8 +35,8 @@ const Controller = __importStar(require("../controllers/TotalController"));
 // Llamamos al router
 // Creamos una ruta de tipo GET para el método de pruebas
 router.get('/processTotals', Controller.processTotals);
-router.put('/edit', Controller.edit);
-router.delete('/remove', Controller.remove);
+router.get('/removeByMonths', Controller.removeByMonths);
+router.get('/removeOldDues', Controller.removeOldDues);
 router.get('/getAll', Controller.getAll);
 router.get('/getById', Controller.getById);
 app.use(router);

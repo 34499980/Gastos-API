@@ -94,16 +94,16 @@ export async function getByMonth(req): Promise<Movement[]>{
 }
 export async function getMinorMonth(req): Promise<Movement[]>{
     let list: Movement[] = [];
+    console.log(req)
     const month = Number(req.month);
     const year = Number(req.year);
-    return await db.collection(table).where("month", "<", month)                                     
-                                     .where("year", "<", year)
+    return await db.collection(table)                                     
+                                     .where("year", "<=", year)
                                      .get().then(snap => {
         snap.forEach(doc => {            
            
             list.push(doc.data())
-        });
-       
+        });       
         return list;
     });     
 }
