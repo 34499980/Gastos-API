@@ -106,7 +106,7 @@ function removeOldDues(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const dueEntities = (yield dueService.getAll()).map(x => x.key);
         const date = helper.subtractMonths(3);
-        const movementEntities = (yield movementService.getMinorMonth(date)).filter(x => x.month <= date.month);
+        const movementEntities = (yield movementService.getMinorMonth(date)).filter(x => x.month < date.month);
         console.log(movementEntities);
         for (const item of movementEntities) {
             if (item.dueKey != null) {
